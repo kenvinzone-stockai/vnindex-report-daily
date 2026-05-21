@@ -1,2487 +1,527 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#0a0e1a" />
-<title>KenvinZone — Strategy Desk</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KenvinZone – VNINDEX Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap');
-
-  :root {
-    /* Obsidian Gold theme */
-    --bg-0: #0a0e1a;
-    --bg-1: #0f1420;
-    --bg-2: #161c2e;
-    --bg-3: #1c2338;
-    --bg-4: #232c44;
-    --border-1: #1f2940;
-    --border-2: #2a3553;
-    --border-3: #364263;
-
-    --gold: #fbbf24;
-    --gold-2: #f59e0b;
-    --gold-3: #d97706;
-    --gold-soft: rgba(251,191,36,0.10);
-    --gold-glow: rgba(251,191,36,0.30);
-
-    --emerald: #10b981;
-    --emerald-soft: rgba(16,185,129,0.10);
-    --rose: #f43f5e;
-    --rose-soft: rgba(244,63,94,0.10);
-    --sky: #38bdf8;
-    --sky-soft: rgba(56,189,248,0.10);
-
-    --text-0: #f1f5f9;
-    --text-1: #cbd5e1;
-    --text-2: #94a3b8;
-    --text-3: #64748b;
-    --text-4: #475569;
-
-    --radius-xs: 6px;
-    --radius-sm: 10px;
-    --radius: 14px;
-    --radius-lg: 20px;
-    --radius-xl: 28px;
-
-    --shadow-1: 0 1px 2px rgba(0,0,0,0.4);
-    --shadow-2: 0 4px 16px rgba(0,0,0,0.35);
-    --shadow-3: 0 12px 40px rgba(0,0,0,0.45);
-    --shadow-gold: 0 0 24px rgba(251,191,36,0.20);
-
-    --font-display: 'Syne', system-ui, sans-serif;
-    --font-mono: 'DM Mono', ui-monospace, monospace;
-    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-
-    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-
-  body {
-    background: var(--bg-0);
-    color: var(--text-0);
-    font-family: var(--font-body);
-    min-height: 100vh;
-    overflow-x: hidden;
-    font-feature-settings: 'ss01', 'cv11';
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* Tabular numerals for mono font */
-  .mono, [class*="mono"] { font-variant-numeric: tabular-nums; }
-
-  /* Ambient background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 70% 50% at 50% -10%, rgba(251,191,36,0.07) 0%, transparent 55%),
-      radial-gradient(ellipse 40% 40% at 90% 90%, rgba(56,189,248,0.05) 0%, transparent 60%),
-      radial-gradient(ellipse 30% 30% at 10% 80%, rgba(244,63,94,0.03) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-    background-size: 48px 48px;
-    pointer-events: none;
-    z-index: 0;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 80%);
-  }
-
-  /* ========== NAV ========== */
-  .nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(10,14,26,0.75);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border-bottom: 1px solid var(--border-1);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    height: 60px;
-  }
-
-  .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-family: var(--font-display);
-    font-size: 19px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-3) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .brand-mark {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-3) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--bg-0);
-    font-size: 14px;
-    font-weight: 900;
-    box-shadow: var(--shadow-gold);
-    position: relative;
-  }
-
-  .brand-mark::after {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: 11px;
-    border: 1px solid rgba(251,191,36,0.3);
-    animation: ring 3s ease infinite;
-  }
-
-  @keyframes ring {
-    0%, 100% { opacity: 0.4; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.08); }
-  }
-
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .live-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 13px;
-    border-radius: 999px;
-    background: var(--emerald-soft);
-    border: 1px solid rgba(16,185,129,0.25);
-    color: var(--emerald);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-  }
-
-  .live-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--emerald);
-    position: relative;
-  }
-
-  .live-dot::before {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: 50%;
-    background: var(--emerald);
-    opacity: 0.4;
-    animation: ping 1.5s ease-out infinite;
-  }
-
-  @keyframes ping {
-    0% { transform: scale(0.8); opacity: 0.5; }
-    100% { transform: scale(2.2); opacity: 0; }
-  }
-
-  .last-updated {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-3);
-  }
-
-  /* ========== LAYOUT ========== */
-  .layout {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 340px 1fr;
-    min-height: calc(100vh - 60px);
-  }
-
-  .sidebar {
-    border-right: 1px solid var(--border-1);
-    background: rgba(15,20,32,0.6);
-    backdrop-filter: blur(12px);
-  }
-
-  .sidebar-inner {
-    position: sticky;
-    top: 60px;
-    height: calc(100vh - 60px);
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* ========== SEARCH ========== */
-  .search-block {
-    padding: 14px 16px 10px;
-    border-bottom: 1px solid var(--border-1);
-  }
-
-  .search-input {
-    width: 100%;
-    background: var(--bg-2);
-    border: 1px solid var(--border-2);
-    color: var(--text-0);
-    padding: 9px 14px 9px 34px;
-    border-radius: var(--radius-sm);
-    font-family: var(--font-body);
-    font-size: 13px;
-    outline: none;
-    transition: all 0.18s var(--ease-out);
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: 11px center;
-  }
-
-  .search-input:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 3px var(--gold-soft);
-  }
-
-  .search-input::placeholder { color: var(--text-4); }
-
-  /* ========== FILTERS ========== */
-  .month-selector {
-    padding: 8px 16px;
-    border-bottom: 1px solid var(--border-1);
-  }
-
-  .month-select {
-    width: 100%;
-    background: var(--bg-2);
-    border: 1px solid var(--border-2);
-    color: var(--text-0);
-    border-radius: var(--radius-sm);
-    padding: 8px 12px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.18s var(--ease-out);
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 32px;
-  }
-
-  .month-select:focus { border-color: var(--gold); }
-
-  .time-filter {
-    padding: 8px 16px;
-    border-bottom: 1px solid var(--border-1);
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 4px;
-  }
-
-  .tf-btn {
-    padding: 6px 4px;
-    border-radius: var(--radius-xs);
-    border: 1px solid var(--border-2);
-    background: var(--bg-2);
-    color: var(--text-3);
-    font-family: var(--font-mono);
-    font-size: 10px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.18s var(--ease-out);
-  }
-
-  .tf-btn:hover { color: var(--gold); border-color: var(--border-3); }
-  .tf-btn.active {
-    color: var(--gold);
-    border-color: var(--gold);
-    background: var(--gold-soft);
-    box-shadow: 0 0 12px var(--gold-soft);
-  }
-
-  .filters {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border-1);
-    display: grid;
-    gap: 12px;
-  }
-
-  .filter-block { display: grid; gap: 8px; }
-
-  .filter-label {
-    font-family: var(--font-mono);
-    font-size: 9px;
-    color: var(--text-4);
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-  }
-
-  .filter-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .chip {
-    border: 1px solid var(--border-2);
-    background: var(--bg-2);
-    color: var(--text-2);
-    border-radius: 999px;
-    padding: 5px 11px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    cursor: pointer;
-    transition: all 0.18s var(--ease-out);
-  }
-
-  .chip:hover { color: var(--gold); border-color: var(--border-3); }
-  .chip.active {
-    color: var(--gold);
-    border-color: var(--gold);
-    background: var(--gold-soft);
-    box-shadow: 0 0 12px var(--gold-soft);
-  }
-
-  /* ========== STATS BAR ========== */
-  .stats-bar {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    padding: 0;
-    border-bottom: 1px solid var(--border-1);
-    background: var(--border-1);
-  }
-
-  .stat-cell {
-    padding: 10px 12px;
-    background: var(--bg-1);
-    text-align: center;
-  }
-
-  .stat-cell .num {
-    font-family: var(--font-mono);
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 1;
-    margin-bottom: 3px;
-  }
-
-  .stat-cell .lbl {
-    font-family: var(--font-mono);
-    font-size: 9px;
-    color: var(--text-4);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .num.bull { color: var(--emerald); }
-  .num.bear { color: var(--rose); }
-  .num.total { color: var(--gold); }
-
-  /* ========== REPORT LIST ========== */
-  .report-list {
-    flex: 1;
-    overflow: auto;
-    padding: 12px;
-    display: grid;
-    gap: 8px;
-    align-content: start;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-3) transparent;
-  }
-
-  .report-list::-webkit-scrollbar { width: 6px; }
-  .report-list::-webkit-scrollbar-track { background: transparent; }
-  .report-list::-webkit-scrollbar-thumb { background: var(--border-3); border-radius: 3px; }
-
-  .date-group-header {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-4);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 6px 2px;
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .date-group-header:first-child { margin-top: 0; }
-
-  .date-group-header::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border-1);
-  }
-
-  .report-count {
-    background: var(--bg-3);
-    border: 1px solid var(--border-2);
-    border-radius: 999px;
-    padding: 1px 7px;
-    font-size: 9px;
-    color: var(--text-2);
-  }
-
-  .report-item {
-    background: var(--bg-2);
-    border: 1px solid var(--border-1);
-    border-radius: var(--radius);
-    padding: 12px 14px;
-    cursor: pointer;
-    transition: all 0.2s var(--ease-out);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .report-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: transparent;
-    transition: background 0.2s var(--ease-out);
-  }
-
-  .report-item:hover {
-    border-color: var(--border-3);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-2);
-  }
-
-  .report-item.active {
-    border-color: var(--gold);
-    background: linear-gradient(135deg, var(--gold-soft) 0%, var(--bg-2) 60%);
-    box-shadow: 0 0 0 1px var(--gold-soft), var(--shadow-2);
-  }
-
-  .report-item.active::before { background: var(--gold); }
-
-  .ri-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-
-  .ri-inst {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-0);
-  }
-
-  .ri-time {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-4);
-  }
-
-  .ri-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
-
-  .badge {
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-family: var(--font-mono);
-    font-size: 9px;
-    font-weight: 500;
-    border: 1px solid var(--border-2);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .badge.bullish { color: var(--emerald); background: var(--emerald-soft); border-color: rgba(16,185,129,0.25); }
-  .badge.bearish { color: var(--rose); background: var(--rose-soft); border-color: rgba(244,63,94,0.25); }
-  .badge.neutral { color: var(--sky); background: var(--sky-soft); border-color: rgba(56,189,248,0.25); }
-  .badge.conf { color: var(--gold); background: var(--gold-soft); border-color: rgba(251,191,36,0.25); }
-
-  .ri-text {
-    color: var(--text-2);
-    font-size: 12px;
-    line-height: 1.55;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  /* ========== CONTENT ========== */
-  .content { min-width: 0; }
-
-  .content-inner {
-    max-width: 1180px;
-    padding: 24px;
-    margin: 0 auto;
-    display: grid;
-    gap: 20px;
-  }
-
-  /* ========== SKELETON LOADER ========== */
-  .skeleton-stack { display: grid; gap: 20px; padding: 24px; }
-  .skel {
-    background: linear-gradient(90deg, var(--bg-2) 0%, var(--bg-3) 50%, var(--bg-2) 100%);
-    background-size: 200% 100%;
-    animation: shimmer 1.6s ease infinite;
-    border-radius: var(--radius);
-  }
-
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-
-  .skel-hero { height: 220px; border-radius: var(--radius-lg); }
-  .skel-row { height: 140px; }
-  .skel-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-  .skel-card { height: 200px; }
-
-  .empty {
-    min-height: calc(100vh - 200px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 12px;
-    color: var(--text-3);
-    font-family: var(--font-mono);
-    font-size: 13px;
-    text-align: center;
-    padding: 24px;
-  }
-
-  .empty-icon {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: var(--bg-2);
-    border: 1px solid var(--border-2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    margin-bottom: 4px;
-  }
-
-  .empty-action {
-    margin-top: 8px;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--gold);
-    background: var(--gold-soft);
-    color: var(--gold);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    cursor: pointer;
-    transition: all 0.18s var(--ease-out);
-  }
-
-  .empty-action:hover { background: var(--gold); color: var(--bg-0); }
-
-  /* ========== HERO ========== */
-  .hero {
-    background: linear-gradient(135deg, var(--bg-2) 0%, var(--bg-3) 100%);
-    border: 1px solid var(--border-2);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-3);
-    overflow: hidden;
-    position: relative;
-    animation: fadeUp 0.5s var(--ease-out);
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold-glow), transparent);
-  }
-
-  .hero-inner {
-    padding: 32px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 24px;
-    align-items: start;
-  }
-
-  .hero-line {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 14px;
-  }
-
-  .hero-title {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 36px;
-    letter-spacing: -1.5px;
-    color: var(--text-0);
-    line-height: 1;
-  }
-
-  .hero-pill {
-    padding: 4px 11px;
-    border-radius: 999px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border: 1px solid var(--border-2);
-    color: var(--text-2);
-    background: var(--bg-1);
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .hero-pill.bullish { color: var(--emerald); background: var(--emerald-soft); border-color: rgba(16,185,129,0.3); }
-  .hero-pill.bearish { color: var(--rose); background: var(--rose-soft); border-color: rgba(244,63,94,0.3); }
-  .hero-pill.neutral { color: var(--sky); background: var(--sky-soft); border-color: rgba(56,189,248,0.3); }
-  .hero-pill.conf-high { color: var(--gold); background: var(--gold-soft); border-color: rgba(251,191,36,0.3); }
-  .hero-pill.conf-medium { color: var(--sky); background: var(--sky-soft); border-color: rgba(56,189,248,0.3); }
-  .hero-pill.conf-low { color: var(--text-3); background: var(--bg-1); }
-
-  .hero-meta {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-4);
-    margin-bottom: 16px;
-  }
-
-  .hero-meta span { display: inline-flex; align-items: center; gap: 5px; }
-
-  .hero-insight {
-    color: var(--text-1);
-    line-height: 1.75;
-    max-width: 720px;
-    font-size: 14px;
-  }
-
-  .hero-price { text-align: right; }
-
-  .hero-price-label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-4);
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    margin-bottom: 8px;
-  }
-
-  .hero-price-value {
-    font-family: var(--font-mono);
-    font-size: 42px;
-    font-weight: 500;
-    color: var(--gold);
-    text-shadow: 0 0 32px rgba(251,191,36,0.25);
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .hero-price-time {
-    margin-top: 10px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-4);
-  }
-
-  .hero-sparkline {
-    margin-top: 14px;
-    height: 32px;
-    width: 160px;
-    margin-left: auto;
-  }
-
-  /* ========== PANEL ========== */
-  .panel {
-    background: var(--bg-1);
-    border: 1px solid var(--border-1);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-2);
-    overflow: hidden;
-    animation: fadeUp 0.5s var(--ease-out) both;
-  }
-
-  .panel-body { padding: 22px 24px; }
-
-  .panel-title {
-    font-family: var(--font-display);
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-2);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 18px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-
-  .panel-title::before {
-    content: '';
-    width: 3px;
-    height: 14px;
-    border-radius: 2px;
-    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-3) 100%);
-    box-shadow: 0 0 8px var(--gold-glow);
-  }
-
-  /* ========== SUMMARY ========== */
-  .summary-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; }
-
-  .summary-box, .mini-box {
-    background: var(--bg-2);
-    border: 1px solid var(--border-1);
-    border-radius: var(--radius);
-    padding: 20px;
-  }
-
-  .summary-box p, .mini-box p { color: var(--text-1); line-height: 1.8; font-size: 14px; }
-
-  .mini-title {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-4);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  .mini-kv { display: grid; gap: 10px; }
-  .mini-kv-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 8px;
-    border-bottom: 1px dashed var(--border-1);
-  }
-  .mini-kv-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .mini-kv-key {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-3);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-  }
-  .mini-kv-val {
-    color: var(--text-0);
-    font-size: 13px;
-    font-family: var(--font-mono);
-    text-align: right;
-  }
-  .mini-kv-val.gold { color: var(--gold); }
-
-  /* ========== SCENARIOS ========== */
-  .scenarios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-
-  .scenario-card {
-    background: var(--bg-2);
-    border: 1px solid var(--border-1);
-    border-radius: var(--radius);
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .scenario-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--border-2);
-  }
-
-  .scenario-card.primary { border-color: rgba(251,191,36,0.3); background: linear-gradient(135deg, rgba(251,191,36,0.04) 0%, var(--bg-2) 100%); }
-  .scenario-card.primary::after { background: linear-gradient(90deg, var(--gold), var(--gold-3)); }
-  .scenario-card.alternative { border-color: rgba(56,189,248,0.25); }
-  .scenario-card.alternative::after { background: var(--sky); }
-  .scenario-card.invalidation { border-color: rgba(244,63,94,0.25); }
-  .scenario-card.invalidation::after { background: var(--rose); }
-
-  .scenario-type {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    font-weight: 500;
-  }
-  .scenario-type.primary { color: var(--gold); }
-  .scenario-type.alternative { color: var(--sky); }
-  .scenario-type.invalidation { color: var(--rose); }
-
-  .scenario-bias {
-    display: inline-block;
-    margin-bottom: 12px;
-    padding: 3px 9px;
-    border-radius: 999px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .scenario-bias.bullish { color: var(--emerald); background: var(--emerald-soft); }
-  .scenario-bias.bearish { color: var(--rose); background: var(--rose-soft); }
-  .scenario-bias.neutral { color: var(--sky); background: var(--sky-soft); }
-
-  .scenario-setup { color: var(--text-1); line-height: 1.65; font-size: 13px; margin-bottom: 16px; }
-
-  .scenario-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; margin-bottom: 14px; }
-
-  .stat-label {
-    font-family: var(--font-mono);
-    font-size: 9px;
-    color: var(--text-4);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
-  .stat-value {
-    font-size: 13px;
-    color: var(--text-0);
-    line-height: 1.5;
-    font-family: var(--font-mono);
-  }
-  .stat-value.green { color: var(--emerald); }
-  .stat-value.red { color: var(--rose); }
-  .stat-value.gold { color: var(--gold); }
-
-  .prob-wrap { margin-top: 10px; }
-  .prob-head {
-    display: flex;
-    justify-content: space-between;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-4);
-    margin-bottom: 7px;
-  }
-  .prob-track { height: 5px; background: var(--bg-3); border-radius: 999px; overflow: hidden; }
-  .prob-fill {
-    height: 100%;
-    width: 0;
-    transition: width 0.5s var(--ease-out);
-    border-radius: 999px;
-  }
-  .prob-fill.primary { background: linear-gradient(90deg, var(--gold-3), var(--gold)); box-shadow: 0 0 8px var(--gold-glow); }
-  .prob-fill.alternative { background: var(--sky); }
-  .prob-fill.invalidation { background: var(--rose); }
-
-  /* ========== GRIDS ========== */
-  .triple-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-  /* ========== TF TABLE ========== */
-  .tf-table { width: 100%; border-collapse: collapse; }
-  .tf-table tr { border-bottom: 1px solid var(--border-1); }
-  .tf-table tr:last-child { border-bottom: none; }
-  .tf-table td { padding: 12px 8px; vertical-align: top; }
-
-  .tf-name {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--gold);
-    width: 56px;
-    font-weight: 500;
-  }
-
-  .tf-trend {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    margin-right: 8px;
-    margin-bottom: 4px;
-  }
-
-  .tf-trend.bullish { color: var(--emerald); background: var(--emerald-soft); }
-  .tf-trend.bearish { color: var(--rose); background: var(--rose-soft); }
-  .tf-trend.neutral { color: var(--sky); background: var(--sky-soft); }
-
-  .tf-desc { color: var(--text-1); font-size: 12px; line-height: 1.55; }
-
-  /* ========== LEVELS ========== */
-  .levels { display: grid; gap: 8px; }
-
-  .level {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 14px;
-    border-radius: var(--radius-sm);
-    background: var(--bg-2);
-    border: 1px solid var(--border-1);
-    transition: all 0.18s var(--ease-out);
-  }
-
-  .level:hover { border-color: var(--border-3); }
-
-  .dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .dot.resistance { background: var(--rose); box-shadow: 0 0 10px rgba(244,63,94,0.5); }
-  .dot.support { background: var(--emerald); box-shadow: 0 0 10px rgba(16,185,129,0.5); }
-  .dot.current { background: var(--gold); box-shadow: 0 0 10px rgba(251,191,36,0.6); }
-
-  .level-type {
-    width: 80px;
-    font-family: var(--font-mono);
-    font-size: 9px;
-    text-transform: uppercase;
-    color: var(--text-3);
-    letter-spacing: 0.8px;
-  }
-  .level-price {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--text-0);
-    flex: 1;
-  }
-
-  /* ========== LISTS ========== */
-  .list-stack { display: grid; gap: 8px; }
-
-  .list-item {
-    background: var(--bg-2);
-    border: 1px solid var(--border-1);
-    border-radius: var(--radius-sm);
-    padding: 11px 13px;
-    color: var(--text-1);
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  .list-item.bull { border-color: rgba(16,185,129,0.15); background: rgba(16,185,129,0.04); }
-  .list-item.bear { border-color: rgba(244,63,94,0.15); background: rgba(244,63,94,0.04); }
-  .list-item.risk { border-color: rgba(244,63,94,0.15); background: rgba(244,63,94,0.04); }
-
-  /* ========== MATRIX ========== */
-  .matrix-wrap { overflow-x: auto; }
-  .matrix { width: 100%; border-collapse: collapse; min-width: 600px; }
-  .matrix th {
-    text-align: left;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border-1);
-    color: var(--text-4);
-    font-family: var(--font-mono);
-    font-size: 9px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-  .matrix td {
-    padding: 12px;
-    border-bottom: 1px solid var(--border-1);
-    color: var(--text-1);
-    font-size: 12px;
-    vertical-align: top;
-  }
-  .matrix tr:last-child td { border-bottom: none; }
-  .matrix tr:hover td { background: var(--bg-2); }
-
-  /* ========== ACTION PLAN ========== */
-  .exec-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .exec-card {
-    background: var(--bg-2);
-    border: 1px solid var(--border-1);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-  }
-  .exec-key {
-    font-family: var(--font-mono);
-    font-size: 9px;
-    color: var(--text-4);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-  }
-  .exec-val { color: var(--text-0); font-size: 13px; line-height: 1.6; }
-
-  .checklist { display: grid; gap: 8px; }
-
-  .check {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    background: var(--bg-2);
-    border: 1px solid var(--border-1);
-    cursor: pointer;
-    transition: all 0.18s var(--ease-out);
-  }
-
-  .check:hover { background: var(--bg-3); }
-
-  .check-box {
-    width: 18px; height: 18px;
-    border: 1.5px solid var(--border-3);
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: transparent;
-    font-size: 12px;
-    flex-shrink: 0;
-    transition: all 0.18s var(--ease-spring);
-  }
-
-  .check.checked .check-box {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--bg-0);
-    font-weight: 700;
-    transform: scale(1.05);
-  }
-  .check.checked .check-text { text-decoration: line-through; color: var(--text-4); }
-  .check-text { color: var(--text-1); font-size: 13px; line-height: 1.5; }
-
-  /* ========== FAB (Mobile only) ========== */
-  .fab {
-    display: none;
-    position: fixed;
-    right: 20px;
-    bottom: calc(20px + var(--safe-bottom));
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-3) 100%);
-    color: var(--bg-0);
-    border: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 8px 24px rgba(251,191,36,0.4), 0 0 0 1px rgba(251,191,36,0.5);
-    z-index: 90;
-    font-size: 22px;
-    transition: all 0.25s var(--ease-spring);
-  }
-
-  .fab:hover { transform: translateY(-2px) scale(1.05); }
-  .fab:active { transform: scale(0.95); }
-
-  .fab-badge {
-    position: absolute;
-    top: -3px;
-    right: -3px;
-    background: var(--rose);
-    color: white;
-    font-size: 10px;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    min-width: 20px;
-    height: 20px;
-    border-radius: 999px;
-    padding: 0 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid var(--bg-0);
-  }
-
-  /* ========== BOTTOM SHEET (Mobile only) ========== */
-  .sheet-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    z-index: 200;
-    opacity: 0;
-    transition: opacity 0.3s var(--ease-out);
-  }
-
-  .sheet-backdrop.open {
-    display: block;
-    opacity: 1;
-  }
-
-  .bottom-sheet {
-    display: none;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--bg-1);
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    box-shadow: 0 -8px 32px rgba(0,0,0,0.5);
-    z-index: 201;
-    transform: translateY(100%);
-    transition: transform 0.35s var(--ease-out);
-    max-height: 88vh;
-    flex-direction: column;
-    padding-bottom: var(--safe-bottom);
-  }
-
-  .bottom-sheet.open {
-    display: flex;
-    transform: translateY(0);
-  }
-
-  .sheet-handle {
-    width: 100%;
-    padding: 10px 0 6px;
-    display: flex;
-    justify-content: center;
-    cursor: grab;
-    touch-action: none;
-  }
-
-  .sheet-handle::before {
-    content: '';
-    width: 40px;
-    height: 4px;
-    border-radius: 999px;
-    background: var(--border-3);
-  }
-
-  .sheet-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 4px 18px 14px;
-    border-bottom: 1px solid var(--border-1);
-  }
-
-  .sheet-title {
-    font-family: var(--font-display);
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text-0);
-  }
-
-  .sheet-close {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--bg-3);
-    border: 1px solid var(--border-2);
-    color: var(--text-2);
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.18s var(--ease-out);
-  }
-
-  .sheet-close:hover { background: var(--bg-4); color: var(--text-0); }
-
-  .sheet-content {
-    flex: 1;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* ========== TOAST ========== */
-  .toast-container {
-    position: fixed;
-    top: 78px;
-    right: 16px;
-    z-index: 150;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    pointer-events: none;
-  }
-
-  .toast {
-    background: var(--bg-2);
-    border: 1px solid var(--gold);
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    color: var(--text-0);
-    font-size: 13px;
-    box-shadow: var(--shadow-3), 0 0 0 1px var(--gold-soft);
-    pointer-events: auto;
-    cursor: pointer;
-    animation: toastIn 0.4s var(--ease-spring), toastOut 0.4s var(--ease-out) 4.5s forwards;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    max-width: 320px;
-  }
-
-  .toast::before {
-    content: '🔔';
-    font-size: 16px;
-  }
-
-  @keyframes toastIn {
-    from { opacity: 0; transform: translateX(20px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  @keyframes toastOut {
-    to { opacity: 0; transform: translateX(20px); }
-  }
-
-  /* ========== SCROLL TOP ========== */
-  .scroll-top {
-    position: fixed;
-    right: 20px;
-    bottom: calc(20px + var(--safe-bottom));
-    width: 42px; height: 42px;
-    border-radius: 50%;
-    background: var(--bg-3);
-    border: 1px solid var(--border-3);
-    color: var(--gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: var(--shadow-2);
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.25s var(--ease-out);
-    z-index: 89;
-    font-size: 18px;
-  }
-
-  .scroll-top.visible { opacity: 1; pointer-events: auto; }
-  .scroll-top:hover { background: var(--bg-4); transform: translateY(-2px); }
-
-  /* ========== RESPONSIVE ========== */
-  @media (max-width: 1100px) {
-    .layout { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
-    .fab { display: flex; }
-    .scroll-top { right: 88px; }
-    .summary-grid, .scenarios-grid, .triple-grid, .dual-grid {
-      grid-template-columns: 1fr;
-    }
-    .hero-inner { grid-template-columns: 1fr; }
-    .hero-price { text-align: left; }
-    .hero-sparkline { margin-left: 0; }
-  }
-
-  @media (max-width: 640px) {
-    .nav { padding: 0 14px; }
-    .last-updated { display: none; }
-    .content-inner { padding: 16px; gap: 14px; }
-    .hero-inner { padding: 22px; }
-    .panel-body { padding: 18px 20px; }
-    .hero-title { font-size: 28px; }
-    .hero-price-value { font-size: 32px; }
-  }
-
-  /* Reduce motion for accessibility */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
+:root {
+  --green-700:#15803d;--green-600:#16a34a;--green-500:#22c55e;--green-400:#4ade80;--green-300:#86efac;
+  --red-500:#ef4444;--red-400:#f87171;--yellow-400:#facc15;--orange-400:#fb923c;
+  --purple-400:#a78bfa;--blue-400:#60a5fa;--teal-400:#2dd4bf;
+  --gray-950:#030712;--gray-900:#111827;--gray-800:#1f2937;--gray-700:#374151;
+  --gray-600:#4b5563;--gray-400:#9ca3af;--gray-300:#d1d5db;--gray-200:#e5e7eb;
+  --font-main:'Be Vietnam Pro',sans-serif;--font-mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--font-main);background:var(--gray-950);color:#fff;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 20% 0%,rgba(21,128,61,0.12) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 100%,rgba(22,163,74,0.06) 0%,transparent 60%);pointer-events:none;z-index:0;}
+.container{max-width:1200px;margin:0 auto;padding:0 24px;position:relative;z-index:1;}
+
+/* HEADER */
+header{border-bottom:1px solid rgba(34,197,94,0.15);padding:16px 0;position:sticky;top:0;background:rgba(3,7,18,0.95);backdrop-filter:blur(20px);z-index:100;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--green-600),var(--green-400));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.logo-text{font-size:17px;font-weight:800;letter-spacing:-0.5px;}
+.logo-text span{color:var(--green-400);}
+.logo-sub{font-size:11px;color:var(--gray-400);margin-top:1px;}
+.header-right{display:flex;align-items:center;gap:12px;}
+.live-badge{display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--green-400);}
+.live-dot{width:6px;height:6px;background:var(--green-400);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
+.last-update{font-size:11px;color:var(--gray-400);font-family:var(--font-mono);}
+
+/* STATS */
+.stats-bar{display:flex;gap:12px;padding:16px 0 8px;flex-wrap:wrap;}
+.stat-item{background:var(--gray-900);border:1px solid var(--gray-800);border-radius:10px;padding:10px 18px;display:flex;align-items:center;gap:10px;}
+.stat-val{font-size:22px;font-weight:800;font-family:var(--font-mono);}
+.sv-g{color:var(--green-400);}.sv-r{color:var(--red-400);}.sv-y{color:var(--yellow-400);}.sv-w{color:var(--green-300);}
+.stat-label{font-size:12px;color:var(--gray-400);font-weight:500;}
+
+/* FILTERS */
+.filter-bar{display:flex;align-items:center;gap:10px;padding:8px 0 16px;flex-wrap:wrap;}
+.filter-label{font-size:13px;color:var(--gray-400);font-weight:500;}
+.filter-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--gray-700);background:var(--gray-800);color:var(--gray-400);font-size:13px;font-family:var(--font-main);cursor:pointer;transition:all 0.2s;font-weight:500;}
+.filter-btn:hover{border-color:var(--green-600);color:var(--green-400);}
+.filter-btn.active{background:rgba(34,197,94,0.12);border-color:var(--green-500);color:var(--green-400);}
+.filter-select{padding:6px 14px;border-radius:8px;border:1px solid var(--gray-700);background:var(--gray-800);color:#fff;font-size:13px;font-family:var(--font-main);cursor:pointer;outline:none;}
+
+/* DAY GROUP */
+.day-group{margin-bottom:32px;}
+.day-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:10px 16px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.12);border-radius:10px;}
+.day-header-date{font-size:14px;font-weight:700;color:var(--green-400);font-family:var(--font-mono);}
+.day-header-count{font-size:12px;color:var(--gray-400);background:var(--gray-800);padding:2px 10px;border-radius:10px;}
+
+/* REPORT CARD */
+.report-card{background:var(--gray-900);border:1px solid var(--gray-800);border-radius:16px;overflow:hidden;margin-bottom:24px;transition:border-color 0.2s;animation:fadeIn 0.4s ease both;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.report-card:hover{border-color:rgba(34,197,94,0.25);}
+
+/* TOPBAR */
+.card-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--gray-800);flex-wrap:wrap;gap:10px;}
+.card-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.chip{font-family:var(--font-mono);font-size:12px;font-weight:700;padding:3px 10px;border-radius:6px;}
+.chip-vnindex{color:var(--green-400);background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);}
+.chip-price{color:var(--green-300);font-size:13px;font-weight:600;}
+.chip-dt{font-size:12px;color:var(--gray-400);font-family:var(--font-mono);}
+.chip-session{font-size:11px;font-weight:700;color:var(--yellow-400);background:rgba(250,204,21,0.1);padding:3px 10px;border-radius:6px;border:1px solid rgba(250,204,21,0.2);}
+.chip-id{font-size:11px;color:var(--gray-600);font-family:var(--font-mono);}
+
+/* HERO */
+.card-hero{display:grid;grid-template-columns:1fr 200px;border-bottom:1px solid var(--gray-800);}
+.hero-qv{padding:20px;border-right:1px solid var(--gray-800);}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-400);margin-bottom:8px;}
+.qv-text{font-size:14px;line-height:1.75;color:var(--gray-200);}
+.hero-score{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:10px;}
+.score-ring{position:relative;width:76px;height:76px;}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring circle{fill:none;stroke-width:7;stroke-linecap:round;}
+.score-ring .bg{stroke:var(--gray-800);}
+.score-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;font-family:var(--font-mono);}
+.action-label{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;text-align:center;}
+.al-buy{background:rgba(34,197,94,0.15);color:var(--green-400);border:1px solid rgba(34,197,94,0.3);}
+.al-hold{background:rgba(250,204,21,0.12);color:var(--yellow-400);border:1px solid rgba(250,204,21,0.25);}
+.al-reduce{background:rgba(239,68,68,0.12);color:var(--red-400);border:1px solid rgba(239,68,68,0.25);}
+.al-profit{background:rgba(251,146,60,0.12);color:var(--orange-400);border:1px solid rgba(251,146,60,0.25);}
+.al-watch{background:rgba(139,92,246,0.12);color:var(--purple-400);border:1px solid rgba(139,92,246,0.25);}
+.al-avoid{background:rgba(239,68,68,0.08);color:var(--red-400);border:1px solid rgba(239,68,68,0.18);}
+.action-prob{font-size:11px;color:var(--gray-400);font-family:var(--font-mono);}
+
+/* SCORING */
+.scoring-row{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--gray-800);}
+.score-col{padding:12px 14px;border-right:1px solid var(--gray-800);}
+.score-col:last-child{border-right:none;}
+.sc-label{font-size:10px;color:var(--gray-400);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;}
+.sc-bar-bg{height:4px;background:var(--gray-800);border-radius:2px;overflow:hidden;margin-bottom:4px;}
+.sc-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green-700),var(--green-400));}
+.sc-val{font-size:12px;font-weight:700;font-family:var(--font-mono);color:var(--green-400);}
+.sc-note{font-size:11px;color:var(--gray-400);line-height:1.5;margin-top:4px;}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;gap:10px;padding:9px 20px;background:rgba(34,197,94,0.04);border-bottom:1px solid var(--gray-800);}
+.divider span{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--green-500);white-space:nowrap;}
+.divider-line{flex:1;height:1px;background:var(--gray-800);}
+
+/* SECTIONS */
+.sec{padding:16px 20px;border-bottom:1px solid var(--gray-800);}
+.sec:last-child{border-bottom:none;}
+.sec-text{font-size:14px;line-height:1.75;color:var(--gray-300);}
+
+/* MACRO CATALYSTS */
+.catalyst-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;}
+.catalyst-item{background:var(--gray-800);border-radius:10px;padding:13px 15px;border-left:3px solid var(--gray-600);}
+.catalyst-item.positive{border-left-color:var(--green-500);}
+.catalyst-item.negative{border-left-color:var(--red-500);}
+.catalyst-item.neutral{border-left-color:var(--yellow-400);}
+.catalyst-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:5px;}
+.catalyst-detail{font-size:12px;color:var(--gray-300);line-height:1.6;}
+.catalyst-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;}
+.cb-pos{background:rgba(34,197,94,0.15);color:var(--green-400);}
+.cb-neg{background:rgba(239,68,68,0.15);color:var(--red-400);}
+.cb-neu{background:rgba(250,204,21,0.15);color:var(--yellow-400);}
+
+/* TF GRID */
+.tf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.tf-box{background:var(--gray-800);border-radius:10px;padding:14px 16px;}
+.tf-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.tf-w1{color:#818cf8;}.tf-d3{color:#38bdf8;}.tf-d1{color:var(--green-400);}.tf-m15{color:var(--yellow-400);}
+.tf-text{font-size:13px;color:var(--gray-300);line-height:1.65;}
+
+/* SECTOR ROTATION */
+.sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.sector-box{background:var(--gray-800);border-radius:10px;padding:12px 14px;}
+.sector-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;}
+.st-lead{color:var(--green-400);}.st-emerge{color:var(--teal-400);}.st-hot{color:var(--yellow-400);}.st-avoid{color:var(--red-400);}
+.sector-tag{display:inline-block;font-size:12px;color:var(--gray-300);background:var(--gray-700);padding:3px 8px;border-radius:6px;margin:2px 2px 2px 0;}
+
+/* TWO VIEW */
+.two-view{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.view-box{background:var(--gray-800);border-radius:10px;padding:14px 16px;}
+.vb-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.vb-inst{color:var(--green-400);}.vb-retail{color:var(--blue-400);}
+.vb-text{font-size:13px;color:var(--gray-300);line-height:1.65;}
+
+/* SCENARIOS */
+.scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.scenario-box{background:var(--gray-800);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden;}
+.scenario-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.sb-bull::before{background:var(--green-500);}
+.sb-bear::before{background:var(--red-500);}
+.sb-neutral::before{background:var(--yellow-400);}
+.scenario-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.scenario-id{font-size:11px;font-weight:800;font-family:var(--font-mono);color:var(--gray-400);}
+.scenario-prob{font-size:18px;font-weight:800;font-family:var(--font-mono);}
+.sp-bull{color:var(--green-400);}.sp-bear{color:var(--red-400);}.sp-neutral{color:var(--yellow-400);}
+.scenario-label{font-size:13px;font-weight:700;color:#fff;margin-bottom:8px;}
+.scenario-field{margin-bottom:6px;}
+.sf-key{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--gray-400);margin-bottom:2px;}
+.sf-val{font-size:12px;color:var(--gray-300);line-height:1.5;}
+
+/* HORIZON */
+.horizon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.horizon-box{background:var(--gray-800);border-radius:10px;padding:14px 16px;}
+.hb-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.hb-today{color:var(--yellow-400);}.hb-week{color:var(--green-400);}.hb-mid{color:var(--blue-400);}
+.hb-text{font-size:13px;color:var(--gray-300);line-height:1.65;}
+
+/* CHECKLIST */
+.checklist{display:flex;flex-direction:column;gap:8px;}
+.checklist-item{display:flex;align-items:flex-start;gap:10px;background:var(--gray-800);border-radius:8px;padding:10px 14px;}
+.cl-num{width:22px;height:22px;border-radius:50%;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--green-400);flex-shrink:0;font-family:var(--font-mono);}
+.cl-text{font-size:13px;color:var(--gray-300);line-height:1.6;}
+
+/* ACTION PLAN */
+.action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.action-box{background:var(--gray-800);border-radius:10px;padding:13px 15px;border-left:3px solid var(--green-600);}
+.ab-red{border-left-color:var(--red-500);}
+.ab-yellow{border-left-color:var(--yellow-400);}
+.ab-purple{border-left-color:var(--purple-400);}
+.ab-blue{border-left-color:var(--blue-400);}
+.ab-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray-400);margin-bottom:6px;}
+.ab-text{font-size:13px;color:var(--gray-200);line-height:1.6;}
+
+.disclaimer{font-size:11px;color:var(--gray-600);font-style:italic;padding:12px 20px;border-top:1px solid var(--gray-800);}
+
+/* EMPTY/LOADING */
+.empty-state{text-align:center;padding:80px 20px;color:var(--gray-400);}
+.empty-state .icon{font-size:48px;margin-bottom:16px;opacity:0.4;}
+.empty-state h3{font-size:18px;margin-bottom:8px;color:var(--gray-200);}
+.loading{text-align:center;padding:60px;color:var(--gray-400);}
+.spinner{width:30px;height:30px;border:3px solid var(--gray-800);border-top-color:var(--green-500);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:900px){
+  .card-hero{grid-template-columns:1fr;}
+  .hero-qv{border-right:none;border-bottom:1px solid var(--gray-800);}
+  .hero-score{flex-direction:row;padding:16px 20px;}
+  .scoring-row{grid-template-columns:repeat(2,1fr);}
+  .tf-grid,.two-view,.scenario-grid,.horizon-grid,.sector-grid{grid-template-columns:1fr;}
+  .action-grid{grid-template-columns:1fr;}
+  .logo-sub{display:none;}
+}
 </style>
 </head>
 <body>
 
-  <!-- ========== NAV ========== -->
-  <div class="nav">
-    <div class="nav-brand">
-      <div class="brand-mark">K</div>
-      <span>KenvinZone</span>
-    </div>
-    <div class="nav-right">
-      <div class="live-pill"><span class="live-dot"></span>LIVE</div>
-      <div class="last-updated" id="lastUpdated">—</div>
-    </div>
-  </div>
-
-  <!-- ========== LAYOUT ========== -->
-  <div class="layout">
-
-    <!-- Sidebar (desktop) -->
-    <aside class="sidebar">
-      <div class="sidebar-inner">
-        <div class="search-block">
-          <input type="text" id="searchInput" class="search-input" placeholder="Tìm báo cáo, insight, sự kiện..." />
-        </div>
-
-        <div class="month-selector">
-          <select class="month-select" id="monthSelect">
-            <option value="">Đang tải...</option>
-          </select>
-        </div>
-
-        <div class="time-filter">
-          <button class="tf-btn active" data-time="all">Tất cả</button>
-          <button class="tf-btn" data-time="today">Hôm nay</button>
-          <button class="tf-btn" data-time="week">Tuần này</button>
-          <button class="tf-btn" data-time="month">Tháng này</button>
-        </div>
-
-        <div class="filters">
-          <div class="filter-block">
-            <div class="filter-label">Instrument</div>
-            <div class="filter-row" id="instrumentFilters">
-              <button class="chip active" data-type="instrument" data-value="all">Tất cả</button>
-            </div>
-          </div>
-          <div class="filter-block">
-            <div class="filter-label">Bias</div>
-            <div class="filter-row" id="biasFilters">
-              <button class="chip active" data-type="bias" data-value="all">Tất cả</button>
-              <button class="chip" data-type="bias" data-value="bullish">▲ Bullish</button>
-              <button class="chip" data-type="bias" data-value="bearish">▼ Bearish</button>
-              <button class="chip" data-type="bias" data-value="neutral">◆ Neutral</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="stats-bar" id="statsBar">
-          <div class="stat-cell"><div class="num total" id="statTotal">0</div><div class="lbl">Tổng</div></div>
-          <div class="stat-cell"><div class="num bull" id="statBull">0</div><div class="lbl">Bull</div></div>
-          <div class="stat-cell"><div class="num bear" id="statBear">0</div><div class="lbl">Bear</div></div>
-        </div>
-
-        <div class="report-list" id="reportList">
-          <div class="skeleton-stack" style="padding:12px">
-            <div class="skel" style="height:80px;border-radius:14px"></div>
-            <div class="skel" style="height:80px;border-radius:14px"></div>
-            <div class="skel" style="height:80px;border-radius:14px"></div>
-          </div>
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">📈</div>
+        <div>
+          <div class="logo-text">Kenvin<span>Zone</span></div>
+          <div class="logo-sub">Phân tích chiến lược VNINDEX · HoSE</div>
         </div>
       </div>
-    </aside>
-
-    <!-- Content -->
-    <main class="content">
-      <div class="content-inner" id="content">
-        <div class="skeleton-stack">
-          <div class="skel skel-hero"></div>
-          <div class="skel skel-row"></div>
-          <div class="skel-grid">
-            <div class="skel skel-card"></div>
-            <div class="skel skel-card"></div>
-            <div class="skel skel-card"></div>
-          </div>
-        </div>
+      <div class="header-right">
+        <div class="live-badge"><div class="live-dot"></div>Tự động</div>
+        <div class="last-update" id="lastUpdate">--</div>
       </div>
-    </main>
-  </div>
-
-  <!-- ========== MOBILE BOTTOM SHEET ========== -->
-  <div class="sheet-backdrop" id="sheetBackdrop"></div>
-  <div class="bottom-sheet" id="bottomSheet">
-    <div class="sheet-handle" id="sheetHandle"></div>
-    <div class="sheet-header">
-      <div class="sheet-title">Danh sách báo cáo</div>
-      <button class="sheet-close" id="sheetClose" aria-label="Đóng">✕</button>
-    </div>
-    <div class="sheet-content" id="sheetContent">
-      <!-- Mobile sidebar content goes here -->
     </div>
   </div>
+</header>
 
-  <!-- ========== FAB (Mobile) ========== -->
-  <button class="fab" id="fabBtn" aria-label="Mở danh sách báo cáo">
-    📋
-    <span class="fab-badge" id="fabBadge" style="display:none">0</span>
-  </button>
+<div class="container">
+  <div class="stats-bar" id="statsBar" style="display:none">
+    <div class="stat-item"><div class="stat-val sv-w" id="statTotal">0</div><div class="stat-label">Báo cáo</div></div>
+    <div class="stat-item"><div class="stat-val sv-g" id="statBuy">0</div><div class="stat-label">Buy</div></div>
+    <div class="stat-item"><div class="stat-val sv-y" id="statHold">0</div><div class="stat-label">Hold / Watchlist</div></div>
+    <div class="stat-item"><div class="stat-val sv-r" id="statAvoid">0</div><div class="stat-label">Reduce / Avoid</div></div>
+    <div class="stat-item"><div class="stat-val sv-w" id="statAvgScore">--</div><div class="stat-label">Điểm TB</div></div>
+  </div>
 
-  <!-- ========== SCROLL TOP ========== -->
-  <div class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Lên đầu trang">↑</div>
+  <div class="filter-bar">
+    <span class="filter-label">Lọc:</span>
+    <button class="filter-btn active" onclick="setFilter('all',this)">Tất cả</button>
+    <button class="filter-btn" onclick="setFilter('today',this)">Hôm nay</button>
+    <button class="filter-btn" onclick="setFilter('week',this)">Tuần này</button>
+    <button class="filter-btn" onclick="setFilter('month',this)">Tháng này</button>
+    <select class="filter-select" id="monthSelect" onchange="setMonthFilter(this.value)">
+      <option value="">-- Chọn tháng --</option>
+    </select>
+    <select class="filter-select" id="actionFilter" onchange="setActionFilter(this.value)">
+      <option value="">-- Action Label --</option>
+      <option>Buy</option><option>Hold</option><option>Reduce</option>
+      <option>Take Profit Partial</option><option>Watchlist</option><option>Avoid New Entry</option>
+    </select>
+  </div>
 
-  <!-- ========== TOAST ========== -->
-  <div class="toast-container" id="toastContainer"></div>
+  <div id="content">
+    <div class="loading"><div class="spinner"></div>Đang tải dữ liệu...</div>
+  </div>
+</div>
 
 <script>
-// ============================================================
-// UTILS
-// ============================================================
-function esc(str) {
-  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-function safeStr(v, fallback='—') {
-  if (v === null || v === undefined || v === '') return fallback;
-  if (typeof v === 'object') return JSON.stringify(v);
-  return String(v);
-}
-function safeObj(v) { return v && typeof v === 'object' && !Array.isArray(v) ? v : {}; }
-function safeArr(v) {
-  if (Array.isArray(v)) return v;
-  if (typeof v === 'string' && v.trim()) return [v];
-  if (v && typeof v === 'object') return Object.values(v);
-  return [];
+let allReports=[],currentFilter='all',currentMonth='',currentAction='';
+
+async function loadData(){
+  let reports=[];
+  try{const r=await fetch('reports.json?t='+Date.now());const d=await r.json();if(d.reports)reports=[...d.reports];}catch(e){}
+  try{const r=await fetch('history.json?t='+Date.now());const d=await r.json();if(d.reports)d.reports.forEach(r=>{if(!reports.find(x=>x.id===r.id))reports.push(r);});}catch(e){}
+  try{const ls=JSON.parse(localStorage.getItem('vnindex_reports')||'[]');ls.forEach(r=>{if(!reports.find(x=>x.id===r.id))reports.push(r);});}catch(e){}
+  reports.sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
+  allReports=reports;
+  buildMonthOptions();render();updateStats();updateLastUpdate();
 }
 
-function normalizeInstrument(inst) {
-  const s = String(inst || '').toUpperCase();
-  if (!s) return 'N/A';
-  if (s.includes('XAU')) return 'XAUUSD';
-  if (s.includes('NQ') || s.includes('US100') || s.includes('NAS') || s.includes('USTEC') || s.includes('USATEC')) return 'NQ / US100';
-  if (s.includes('VN') || s.includes('VNINDEX')) return 'VNINDEX';
-  return inst;
+function buildMonthOptions(){
+  const months=new Set();
+  allReports.forEach(r=>{if(r.datetime){const d=new Date(r.datetime);months.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);}});
+  const sel=document.getElementById('monthSelect');
+  sel.innerHTML='<option value="">-- Chọn tháng --</option>';
+  [...months].sort().reverse().forEach(m=>{const[y,mo]=m.split('-');const o=document.createElement('option');o.value=m;o.textContent=`Tháng ${mo}/${y}`;sel.appendChild(o);});
 }
-
-function getBiasClass(bias) {
-  const b = String(bias || '').toLowerCase();
-  if (b.includes('bull') || b.includes('long') || b.includes('up')) return 'bullish';
-  if (b.includes('bear') || b.includes('short') || b.includes('down')) return 'bearish';
-  return 'neutral';
+function updateLastUpdate(){if(!allReports.length)return;document.getElementById('lastUpdate').textContent='Cập nhật: '+new Date(allReports[0].datetime).toLocaleString('vi-VN');}
+function updateStats(){
+  const f=getFiltered();
+  document.getElementById('statsBar').style.display=f.length?'flex':'none';
+  document.getElementById('statTotal').textContent=f.length;
+  document.getElementById('statBuy').textContent=f.filter(r=>getAL(r)==='Buy').length;
+  document.getElementById('statHold').textContent=f.filter(r=>['Hold','Watchlist'].includes(getAL(r))).length;
+  document.getElementById('statAvoid').textContent=f.filter(r=>['Reduce','Take Profit Partial','Avoid New Entry'].includes(getAL(r))).length;
+  const sc=f.map(r=>getScore(r)).filter(s=>s>0);
+  document.getElementById('statAvgScore').textContent=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):'--';
 }
-
-function getBiasIcon(cls) {
-  if (cls === 'bullish') return '▲';
-  if (cls === 'bearish') return '▼';
-  return '◆';
-}
-
-function getConfidenceClass(v) {
-  if (typeof v === 'number') {
-    if (v >= 70) return 'conf-high';
-    if (v >= 45) return 'conf-medium';
-    return 'conf-low';
-  }
-  const s = String(v || '').toLowerCase();
-  if (s.includes('high') || s.includes('strong') || s.includes('cao')) return 'conf-high';
-  if (s.includes('med') || s.includes('trung')) return 'conf-medium';
-  return 'conf-low';
-}
-
-function fmtTs(ts) {
-  try {
-    const d = new Date(ts);
-    if (isNaN(d.getTime())) return String(ts);
-    return d.toLocaleString('vi-VN', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
-  } catch { return String(ts); }
-}
-
-function fmtRelativeTime(ts) {
-  try {
-    const d = new Date(ts);
-    if (isNaN(d.getTime())) return '—';
-    const diff = (Date.now() - d.getTime()) / 1000;
-    if (diff < 60) return 'vừa xong';
-    if (diff < 3600) return `${Math.floor(diff/60)} phút trước`;
-    if (diff < 86400) return `${Math.floor(diff/3600)} giờ trước`;
-    if (diff < 604800) return `${Math.floor(diff/86400)} ngày trước`;
-    return fmtTs(ts);
-  } catch { return '—'; }
-}
-
-function fmtPrice(v) {
-  const n = Number(v);
-  if (Number.isFinite(n)) return n.toLocaleString('vi-VN', { minimumFractionDigits:0, maximumFractionDigits:2 });
-  return safeStr(v);
-}
-
-function probValue(v) {
-  if (v === null || v === undefined || v === '') return 0;
-  const n = Number(v);
-  if (!Number.isNaN(n)) return n > 1 ? n : n * 100;
-  const m = String(v).match(/(\d+(\.\d+)?)/);
-  return m ? Number(m[1]) : 0;
-}
-
-function textArray(v) {
-  return safeArr(v).map(item => {
-    if (typeof item === 'object') return safeStr(item.factor || item.description || item.name || item.title || item.event || item);
-    return safeStr(item);
-  });
-}
-
-function getMonthKey(date) {
-  const d = new Date(date);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-}
-
-function getMonthLabel(key) {
-  const [y, m] = key.split('-');
-  const months = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
-  return `${months[parseInt(m)-1]} ${y}`;
-}
-
-// ============================================================
-// STATE
-// ============================================================
-let allReports = [];
-let filteredReports = [];
-let selectedId = null;
-let filters = { instrument: 'all', bias: 'all', time: 'all', search: '' };
-let availableMonths = [];
-let lastReportId = null;
-let pollTimer = null;
-
-// Persistent checklist state
-const CHECKLIST_KEY = 'kenvinzone_checklist_v1';
-function loadChecklistState() {
-  try { return JSON.parse(localStorage.getItem(CHECKLIST_KEY) || '{}'); }
-  catch { return {}; }
-}
-function saveChecklistState(state) {
-  try { localStorage.setItem(CHECKLIST_KEY, JSON.stringify(state)); } catch {}
-}
-let checklistState = loadChecklistState();
-
-// ============================================================
-// NORMALIZE
-// ============================================================
-function normalizeScenario(key, v) {
-  const s = safeObj(v);
-  if (!Object.keys(s).length) return null;
-  return {
-    key,
-    bias: safeStr(s.bias || s.direction || s.type || key),
-    setup: safeStr(s.setup || s.condition || s.trigger || s.description || s.action || '—'),
-    target: Array.isArray(s.target) ? s.target.map(fmtPrice).join(' → ') : safeStr(s.target || s.targets || s.take_profit || s.tp || '—'),
-    stop: safeStr(s.stop_loss || s.stop || s.sl || '—'),
-    rr: safeStr(s.risk_reward || s.rr || s.ratio || '—'),
-    probability: probValue(s.probability || s.prob || 0)
-  };
-}
-
-function normalizeReport(r) {
-  let raw = r.raw !== undefined ? r.raw : r;
-  if (typeof raw === 'string') {
-    try { raw = JSON.parse(raw); } catch(e) { console.error('Parse raw error', e); return null; }
-  }
-  if (!raw || typeof raw !== 'object') return null;
-
-  const summary = safeObj(raw.summary || raw.executive_summary || raw.executiveSummary);
-  const structure = safeObj(raw.market_structure || raw.multi_timeframe_analysis || raw.multiTimeframeAnalysis);
-  const confluence = safeObj(raw.confluence_analysis || raw.bias_logic);
-  const scenariosObj = safeObj(raw.trading_scenarios || raw.scenario_matrix || raw.scenarios);
-  const execution = safeObj(raw.execution_plan || raw.trading_strategy);
-  const keyLevels = safeObj(raw.key_levels || raw.keyLevels);
-  const checklist = safeObj(raw.action_checklist || raw.actionChecklist);
-
-  const instrument = normalizeInstrument(r.instrument || summary.instrument || raw.instrument || raw.metadata?.instrument);
-  const price = r.price_current || summary.current_price || keyLevels.currentPrice || keyLevels.current_price || 0;
-  const bias = safeStr(summary.primary_bias || summary.bias_direction || summary.bias || raw.bias_primary || raw.bias || 'Neutral');
-  const confidence = summary.confidence_level || summary.confidence || raw.confidence || raw.confidence_level || 'N/A';
-
-  const tfRows = ['D1','H4','H1','M15'].map(tf => {
-    const d = safeObj(structure[tf] || structure[tf.toLowerCase()]);
-    if (!Object.keys(d).length) return null;
-    return {
-      tf,
-      trend: safeStr(d.bias || d.trend || '—'),
-      description: [
-        safeStr(d.structure || '', ''),
-        safeStr(d.market_structure || '', ''),
-        safeStr(d.intraday_story || '', ''),
-        safeStr(d.key_levels || '', ''),
-        safeStr(d.momentum || '', ''),
-        safeStr(d.trigger_setup || '', '')
-      ].filter(x => x && x !== '—').join(' · ')
-    };
-  }).filter(Boolean);
-
-  const scenarios = [
-    normalizeScenario('primary_scenario', scenariosObj.primary_scenario),
-    normalizeScenario('alternative_scenario', scenariosObj.alternative_scenario),
-    normalizeScenario('invalidation_scenario', scenariosObj.invalidation_scenario)
-  ].filter(Boolean);
-
-  const datetime = r.datetime || raw.timestamp || new Date().toISOString();
-
-  return {
-    id: r.id || `RPT-${Date.now()}`,
-    instrument,
-    price,
-    priceFmt: fmtPrice(price),
-    bias,
-    biasClass: getBiasClass(bias),
-    confidence,
-    confidenceClass: getConfidenceClass(confidence),
-    insight: safeStr(summary.key_insight || summary.summary || summary.headline || raw.dashboard_summary || raw.telegram_summary || '—'),
-    archetype: safeStr(r.archetype || raw.archetype || raw.metadata?.archetype || 'Báo cáo tự động'),
-    datetime,
-    dateDisplay: r.date_display || fmtTs(datetime).split(' ')[0],
-    timeDisplay: r.time_display || (fmtTs(datetime).split(' ')[1] || '—'),
-    dateObj: new Date(datetime),
-    monthKey: getMonthKey(datetime),
-    resistance: safeArr(structure.H4?.critical_levels?.resistance || keyLevels.resistance || keyLevels.resistances || []).map(fmtPrice),
-    support: safeArr(structure.H4?.critical_levels?.support || keyLevels.support || keyLevels.supports || []).map(fmtPrice),
-    tfRows,
-    bullish: textArray(confluence.bullish_confluence || confluence.bullish_factors || []),
-    bearish: textArray(confluence.bearish_confluence || confluence.bearish_factors || []),
-    risks: textArray(raw.risk_factors || raw.risk_assessment || []),
-    catalysts: textArray(raw.catalyst_watch || raw.catalyst_context || raw.market_context || []),
-    execution,
-    actionItems: [
-      ...textArray(checklist.immediate || []),
-      ...textArray(checklist.pre_trade || []),
-      ...textArray(checklist.monitoring || []),
-      ...textArray(execution.action_plan || execution.actions || execution.checklist || [])
-    ],
-    scenarios,
-    primaryScenario: scenarios.find(x => x.key === 'primary_scenario') || null,
-    alternativeScenario: scenarios.find(x => x.key === 'alternative_scenario') || null,
-    invalidationScenario: scenarios.find(x => x.key === 'invalidation_scenario') || null,
-    docx: r.docx_url || ''
-  };
-}
-
-// ============================================================
-// LOAD DATA
-// ============================================================
-const MAX_REPORTS = 50;
-const STORAGE_KEY = 'kenvinzone_reports_v2';
-
-function loadFromStorage() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch(e) { return []; }
-}
-
-// LRU-friendly save with graceful degradation
-function saveToStorage(reports) {
-  let attempt = reports.slice(0, MAX_REPORTS);
-  for (let i = 0; i < 5; i++) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(attempt));
-      return;
-    } catch(e) {
-      // Quota exceeded — shrink and retry
-      if (attempt.length <= 5) {
-        try { localStorage.removeItem(STORAGE_KEY); } catch {}
-        return;
-      }
-      attempt = attempt.slice(0, Math.floor(attempt.length * 0.7));
-    }
-  }
-}
-
-async function tryFetch(url) {
-  try {
-    const res = await fetch(url + '?t=' + Date.now());
-    if (!res.ok) return [];
-    const json = await res.json();
-    if (Array.isArray(json)) return json;
-    if (Array.isArray(json.reports)) return json.reports;
-    return [json];
-  } catch(e) { return []; }
-}
-
-async function loadReports(showToast = false) {
-  const [freshRaw, historyRaw] = await Promise.all([
-    tryFetch('reports.json'),
-    tryFetch('history.json')
-  ]);
-
-  const storedRaw = loadFromStorage();
-
-  const seen = new Set();
-  const mergedRaw = [...freshRaw, ...historyRaw, ...storedRaw].filter(r => {
-    const id = r.id || r.datetime;
-    if (!id || seen.has(id)) return false;
-    seen.add(id);
-    return true;
-  }).slice(0, MAX_REPORTS);
-
-  saveToStorage(mergedRaw);
-
-  const seen2 = new Set();
-  const newReports = mergedRaw.map(normalizeReport).filter(Boolean)
-    .filter(r => {
-      if (seen2.has(r.id)) return false;
-      seen2.add(r.id);
-      return true;
-    })
-    .sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
-
-  // Detect new report for toast
-  if (showToast && newReports.length > 0 && lastReportId && newReports[0].id !== lastReportId) {
-    showNewReportToast(newReports[0]);
-  }
-  if (newReports.length > 0) lastReportId = newReports[0].id;
-
-  allReports = newReports;
-
-  const monthSet = new Set(allReports.map(r => r.monthKey));
-  availableMonths = [...monthSet].sort().reverse();
-
-  updateMonthSelector();
-
-  if (allReports.length > 0) {
-    document.getElementById('lastUpdated').textContent = fmtRelativeTime(allReports[0].datetime);
-  }
-
-  renderFilters();
-  applyFilters();
-
-  if (!selectedId && filteredReports.length) selectedId = filteredReports[0].id;
-  if (filteredReports.length && !filteredReports.some(r => r.id === selectedId)) selectedId = filteredReports[0].id;
-
-  renderList();
-  renderContent();
-  updateStats();
-}
-
-function updateMonthSelector() {
-  const sel = document.getElementById('monthSelect');
-  const prev = sel.value;
-  sel.innerHTML = `<option value="all">📅 Tất cả tháng</option>` +
-    availableMonths.map(mk => `<option value="${mk}" ${mk === prev ? 'selected' : ''}>${getMonthLabel(mk)}</option>`).join('');
-  if (!prev) sel.value = 'all';
-}
-
-// ============================================================
-// FILTER LOGIC
-// ============================================================
-function isInTimeRange(r, range) {
-  const now = new Date();
-  const d = r.dateObj;
-  if (range === 'today') return d.toDateString() === now.toDateString();
-  if (range === 'week') {
-    const weekAgo = new Date(now);
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    return d >= weekAgo;
-  }
-  if (range === 'month') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  return true;
-}
-
-function matchSearch(r, query) {
-  if (!query) return true;
-  const q = query.toLowerCase();
-  return [
-    r.instrument, r.bias, r.insight, r.archetype,
-    ...r.bullish, ...r.bearish, ...r.risks, ...r.catalysts,
-    ...r.actionItems
-  ].some(x => String(x).toLowerCase().includes(q));
-}
-
-function applyFilters() {
-  const monthFilter = document.getElementById('monthSelect')?.value || 'all';
-
-  filteredReports = allReports.filter(r => {
-    if (filters.instrument !== 'all' && r.instrument !== filters.instrument) return false;
-    if (filters.bias !== 'all' && r.biasClass !== filters.bias) return false;
-    if (filters.time !== 'all' && !isInTimeRange(r, filters.time)) return false;
-    if (monthFilter !== 'all' && monthFilter !== '' && r.monthKey !== monthFilter) return false;
-    if (!matchSearch(r, filters.search)) return false;
+function getFiltered(){
+  const now=new Date();
+  return allReports.filter(r=>{
+    const d=r.datetime?new Date(r.datetime):null;
+    if(currentFilter==='today'&&d&&d.toDateString()!==now.toDateString())return false;
+    if(currentFilter==='week'&&d){const w=new Date(now);w.setDate(now.getDate()-7);if(d<w)return false;}
+    if(currentFilter==='month'&&d&&(d.getMonth()!==now.getMonth()||d.getFullYear()!==now.getFullYear()))return false;
+    if(currentMonth&&d){const[y,mo]=currentMonth.split('-');if(d.getFullYear()!==parseInt(y)||d.getMonth()+1!==parseInt(mo))return false;}
+    if(currentAction&&getAL(r)!==currentAction)return false;
     return true;
   });
 }
+function setFilter(f,btn){currentFilter=f;currentMonth='';document.getElementById('monthSelect').value='';document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();updateStats();}
+function setMonthFilter(v){currentMonth=v;currentFilter='all';document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));document.querySelector('.filter-btn').classList.add('active');render();updateStats();}
+function setActionFilter(v){currentAction=v;render();updateStats();}
 
-function updateStats() {
-  document.getElementById('statTotal').textContent = filteredReports.length;
-  document.getElementById('statBull').textContent = filteredReports.filter(r => r.biasClass === 'bullish').length;
-  document.getElementById('statBear').textContent = filteredReports.filter(r => r.biasClass === 'bearish').length;
+function getRaw(r){try{return typeof r.raw==='object'?r.raw:JSON.parse(r.raw);}catch(e){return null;}}
+function getAL(r){return getRaw(r)?.scoring?.action_label||'';}
+function getScore(r){return getRaw(r)?.scoring?.composite_score||0;}
+
+function getALClass(al){
+  const l=(al||'').toLowerCase();
+  if(l.includes('buy')||l.includes('accumulate'))return 'al-buy';
+  if(l.includes('hold'))return 'al-hold';
+  if(l.includes('reduce'))return 'al-reduce';
+  if(l.includes('profit')||l.includes('partial'))return 'al-profit';
+  if(l.includes('watch'))return 'al-watch';
+  if(l.includes('avoid'))return 'al-avoid';
+  return 'al-watch';
 }
 
-// ============================================================
-// RENDER FILTERS
-// ============================================================
-function attachFilterHandlers() {
-  document.querySelectorAll('.chip').forEach(btn => {
-    btn.onclick = () => {
-      const type = btn.dataset.type;
-      const value = btn.dataset.value;
-      filters[type] = value;
-      // Sync active class across both sidebar + sheet
-      document.querySelectorAll(`.chip[data-type="${type}"]`).forEach(x => x.classList.remove('active'));
-      document.querySelectorAll(`.chip[data-type="${type}"][data-value="${value}"]`).forEach(x => x.classList.add('active'));
-      applyFiltersAndRender();
-    };
-  });
+function buildRing(score){
+  const r=32,c=2*Math.PI*r,fill=(score/100)*c;
+  const color=score>=70?'#22c55e':score>=50?'#facc15':'#ef4444';
+  return `<svg width="76" height="76" viewBox="0 0 76 76"><circle class="bg" cx="38" cy="38" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="0"/><circle class="fill" cx="38" cy="38" r="${r}" stroke="${color}" stroke-dasharray="${c}" stroke-dashoffset="${c-fill}"/></svg>`;
+}
+function bar(v,max){const p=Math.min(100,Math.round((v/max)*100));return `<div class="sc-bar-bg"><div class="sc-bar-fill" style="width:${p}%"></div></div>`;}
 
-  document.querySelectorAll('.tf-btn').forEach(btn => {
-    btn.onclick = () => {
-      filters.time = btn.dataset.time;
-      document.querySelectorAll('.tf-btn').forEach(x => x.classList.remove('active'));
-      document.querySelectorAll(`.tf-btn[data-time="${filters.time}"]`).forEach(x => x.classList.add('active'));
-      applyFiltersAndRender();
-    };
-  });
-
-  const monthSel = document.getElementById('monthSelect');
-  if (monthSel) {
-    monthSel.onchange = () => applyFiltersAndRender();
-  }
-
-  const searchEl = document.getElementById('searchInput');
-  if (searchEl) {
-    let searchTimer;
-    searchEl.oninput = (e) => {
-      clearTimeout(searchTimer);
-      searchTimer = setTimeout(() => {
-        filters.search = e.target.value.trim();
-        applyFiltersAndRender();
-      }, 200);
-    };
-  }
+function scenarioBiasClass(bias){
+  if(!bias)return'sb-neutral';
+  const b=bias.toLowerCase();
+  if(b.includes('bull'))return'sb-bull';
+  if(b.includes('bear'))return'sb-bear';
+  return'sb-neutral';
+}
+function scenarioProbClass(bias){
+  if(!bias)return'sp-neutral';
+  const b=bias.toLowerCase();
+  if(b.includes('bull'))return'sp-bull';
+  if(b.includes('bear'))return'sp-bear';
+  return'sp-neutral';
 }
 
-function applyFiltersAndRender() {
-  applyFilters();
-  selectedId = filteredReports.length ? filteredReports[0].id : null;
-  renderList();
-  renderContent();
-  updateStats();
-  updateFabBadge();
-}
+function buildCard(r,idx){
+  const raw=getRaw(r),score=getScore(r),al=getAL(r);
+  const sc=raw?.scoring||{},ap=raw?.action_plan||{};
+  const scenarios=raw?.scenarios||[];
+  const horizon=raw?.horizon||{};
+  const checklist=raw?.checklist||[];
+  const catalysts=raw?.macro_catalysts||[];
+  const sr=raw?.sector_rotation||{};
+  const price=r.price_current?parseFloat(r.price_current).toLocaleString('vi-VN',{maximumFractionDigits:2}):'';
 
-function renderFilters() {
-  const instruments = [...new Set(allReports.map(r => r.instrument).filter(Boolean))];
-  const instrumentHtml = `
-    <button class="chip ${filters.instrument === 'all' ? 'active' : ''}" data-type="instrument" data-value="all">Tất cả</button>
-    ${instruments.map(inst => `<button class="chip ${filters.instrument === inst ? 'active' : ''}" data-type="instrument" data-value="${esc(inst)}">${esc(inst)}</button>`).join('')}
-  `;
-  document.getElementById('instrumentFilters').innerHTML = instrumentHtml;
-}
+  // Sector tags helper
+  const tags=(arr)=>(arr||[]).map(t=>`<span class="sector-tag">${t}</span>`).join('');
 
-// ============================================================
-// RENDER LIST
-// ============================================================
-function renderReportListHtml() {
-  if (!filteredReports.length) {
-    return `
-      <div class="empty" style="min-height:200px">
-        <div class="empty-icon">📭</div>
-        <div>Không có báo cáo phù hợp</div>
-        <button class="empty-action" onclick="resetFilters()">Xoá bộ lọc</button>
-      </div>`;
-  }
-
-  const groups = {};
-  filteredReports.forEach(r => {
-    const key = r.dateDisplay;
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(r);
-  });
-
-  let html = '';
-  Object.entries(groups).forEach(([date, reports]) => {
-    html += `<div class="date-group-header">${esc(date)}<span class="report-count">${reports.length}</span></div>`;
-    reports.forEach(r => {
-      html += `
-        <div class="report-item ${r.id === selectedId ? 'active' : ''}" data-id="${esc(r.id)}">
-          <div class="ri-top">
-            <div class="ri-inst">${esc(r.instrument)}</div>
-            <div class="ri-time">${esc(r.timeDisplay)}</div>
-          </div>
-          <div class="ri-badges">
-            <span class="badge ${r.biasClass}">${getBiasIcon(r.biasClass)} ${esc(r.bias)}</span>
-            <span class="badge conf">${esc(safeStr(r.confidence, 'N/A'))}</span>
-          </div>
-          <div class="ri-text">${esc(r.insight)}</div>
-        </div>
-      `;
-    });
-  });
-
-  return html;
-}
-
-function renderList() {
-  const html = renderReportListHtml();
-  const wrap = document.getElementById('reportList');
-  if (wrap) wrap.innerHTML = html;
-
-  // Also update mobile sheet
-  const sheetContent = document.getElementById('sheetContent');
-  if (sheetContent) {
-    sheetContent.innerHTML = `
-      <div class="search-block">
-        <input type="text" id="searchInputMobile" class="search-input" placeholder="Tìm báo cáo, insight, sự kiện..." value="${esc(filters.search)}" />
-      </div>
-      <div class="month-selector">
-        <select class="month-select" id="monthSelectMobile">
-          ${availableMonths.length === 0 ? '<option value="all">📅 Tất cả tháng</option>' :
-            `<option value="all">📅 Tất cả tháng</option>` + availableMonths.map(mk => `<option value="${mk}">${getMonthLabel(mk)}</option>`).join('')}
-        </select>
-      </div>
-      <div class="time-filter" id="timeFilterMobile">
-        <button class="tf-btn ${filters.time==='all'?'active':''}" data-time="all">Tất cả</button>
-        <button class="tf-btn ${filters.time==='today'?'active':''}" data-time="today">Hôm nay</button>
-        <button class="tf-btn ${filters.time==='week'?'active':''}" data-time="week">Tuần này</button>
-        <button class="tf-btn ${filters.time==='month'?'active':''}" data-time="month">Tháng này</button>
-      </div>
-      <div class="filters">
-        <div class="filter-block">
-          <div class="filter-label">Instrument</div>
-          <div class="filter-row" id="instrumentFiltersMobile"></div>
-        </div>
-        <div class="filter-block">
-          <div class="filter-label">Bias</div>
-          <div class="filter-row">
-            <button class="chip ${filters.bias==='all'?'active':''}" data-type="bias" data-value="all">Tất cả</button>
-            <button class="chip ${filters.bias==='bullish'?'active':''}" data-type="bias" data-value="bullish">▲ Bullish</button>
-            <button class="chip ${filters.bias==='bearish'?'active':''}" data-type="bias" data-value="bearish">▼ Bearish</button>
-            <button class="chip ${filters.bias==='neutral'?'active':''}" data-type="bias" data-value="neutral">◆ Neutral</button>
-          </div>
-        </div>
-      </div>
-      <div class="report-list" style="height:auto;flex:none;padding:12px 16px 20px">
-        ${html}
-      </div>
-    `;
-
-    // Sync month
-    const ms = document.getElementById('monthSelectMobile');
-    const original = document.getElementById('monthSelect');
-    if (ms && original) ms.value = original.value;
-
-    // Build instruments for mobile
-    const instruments = [...new Set(allReports.map(r => r.instrument).filter(Boolean))];
-    document.getElementById('instrumentFiltersMobile').innerHTML = `
-      <button class="chip ${filters.instrument === 'all' ? 'active' : ''}" data-type="instrument" data-value="all">Tất cả</button>
-      ${instruments.map(inst => `<button class="chip ${filters.instrument === inst ? 'active' : ''}" data-type="instrument" data-value="${esc(inst)}">${esc(inst)}</button>`).join('')}
-    `;
-
-    // Mobile search input
-    const sm = document.getElementById('searchInputMobile');
-    if (sm) {
-      let timer;
-      sm.oninput = (e) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-          filters.search = e.target.value.trim();
-          const desktop = document.getElementById('searchInput');
-          if (desktop) desktop.value = filters.search;
-          applyFiltersAndRender();
-        }, 200);
-      };
-    }
-
-    // Mobile month select sync
-    const msMobile = document.getElementById('monthSelectMobile');
-    if (msMobile) {
-      msMobile.onchange = () => {
-        document.getElementById('monthSelect').value = msMobile.value;
-        applyFiltersAndRender();
-      };
-    }
-  }
-
-  // Re-attach all filter handlers (they exist in both sidebar + sheet now)
-  attachFilterHandlers();
-
-  // Click on report items
-  document.querySelectorAll('.report-item').forEach(el => {
-    el.addEventListener('click', () => {
-      selectedId = el.dataset.id;
-      renderList();
-      renderContent();
-      // Mobile: close sheet + scroll content into view
-      if (window.innerWidth <= 1100) {
-        closeSheet();
-        setTimeout(() => {
-          const content = document.querySelector('.content');
-          if (content) content.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 300);
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-  });
-}
-
-function resetFilters() {
-  filters = { instrument: 'all', bias: 'all', time: 'all', search: '' };
-  document.getElementById('monthSelect').value = 'all';
-  const s = document.getElementById('searchInput');
-  if (s) s.value = '';
-  applyFiltersAndRender();
-}
-
-// ============================================================
-// RENDER CONTENT
-// ============================================================
-function scenarioCard(label, cls, s) {
-  if (!s) return `
-    <div class="scenario-card ${cls}">
-      <div class="scenario-type ${cls}">${esc(label)}</div>
-      <div style="color:var(--text-4);font-size:12px">Không có dữ liệu</div>
-    </div>`;
+  // Catalyst impact badge
+  const impactBadge=(imp)=>{
+    if(!imp)return'';
+    if(imp==='positive')return'<span class="catalyst-badge cb-pos">Tích cực</span>';
+    if(imp==='negative')return'<span class="catalyst-badge cb-neg">Tiêu cực</span>';
+    return'<span class="catalyst-badge cb-neu">Trung lập</span>';
+  };
 
   return `
-    <div class="scenario-card ${cls}">
-      <div class="scenario-type ${cls}">${esc(label)}</div>
-      <div class="scenario-bias ${getBiasClass(s.bias)}">${getBiasIcon(getBiasClass(s.bias))} ${esc(s.bias)}</div>
-      <div class="scenario-setup">${esc(s.setup)}</div>
-      <div class="scenario-stats">
-        <div><div class="stat-label">Mục tiêu</div><div class="stat-value green">${esc(s.target)}</div></div>
-        <div><div class="stat-label">Cắt lỗ</div><div class="stat-value red">${esc(s.stop)}</div></div>
-        <div><div class="stat-label">R / R</div><div class="stat-value gold">${esc(s.rr)}</div></div>
-      </div>
-      <div class="prob-wrap">
-        <div class="prob-head"><span>Xác suất</span><span class="mono">${Math.round(s.probability || 0)}%</span></div>
-        <div class="prob-track"><div class="prob-fill ${cls}" data-pct="${Math.min(Math.round(s.probability||0),100)}"></div></div>
-      </div>
-    </div>`;
+<div class="report-card" style="animation-delay:${idx*0.05}s">
+
+  <div class="card-topbar">
+    <div class="card-meta">
+      <span class="chip chip-vnindex">VNINDEX</span>
+      ${price?`<span class="chip chip-price">${price}</span>`:''}
+      <span class="chip-dt">${r.date_display||''} ${r.time_display||''}</span>
+      ${r.session?`<span class="chip-session">Phiên ${r.session}</span>`:''}
+    </div>
+    <span class="chip-id">${r.id||''}</span>
+  </div>
+
+  <!-- HERO -->
+  <div class="card-hero">
+    <div class="hero-qv">
+      <div class="sec-label">⚡ Quan điểm nhanh</div>
+      <div class="qv-text">${raw?.quick_view||'—'}</div>
+    </div>
+    <div class="hero-score">
+      <div class="score-ring">${buildRing(score)}<div class="score-num">${score}</div></div>
+      <div class="action-label ${getALClass(al)}">${al||'—'}</div>
+      <div class="action-prob">Xác suất: ${sc.action_probability_pct||0}%</div>
+    </div>
+  </div>
+
+  <!-- SCORING với notes -->
+  <div class="scoring-row">
+    <div class="score-col"><div class="sc-label">Kỹ thuật</div>${bar(sc.technical_structure||0,30)}<div class="sc-val">${sc.technical_structure||0}/30</div>${sc.technical_note?`<div class="sc-note">${sc.technical_note}</div>`:''}</div>
+    <div class="score-col"><div class="sc-label">Timing</div>${bar(sc.timing_execution||0,20)}<div class="sc-val">${sc.timing_execution||0}/20</div>${sc.timing_note?`<div class="sc-note">${sc.timing_note}</div>`:''}</div>
+    <div class="score-col"><div class="sc-label">Dòng tiền</div>${bar(sc.liquidity_money_flow||0,20)}<div class="sc-val">${sc.liquidity_money_flow||0}/20</div>${sc.liquidity_note?`<div class="sc-note">${sc.liquidity_note}</div>`:''}</div>
+    <div class="score-col"><div class="sc-label">Sector</div>${bar(sc.sector_rotation_breadth||0,15)}<div class="sc-val">${sc.sector_rotation_breadth||0}/15</div>${sc.sector_note?`<div class="sc-note">${sc.sector_note}</div>`:''}</div>
+    <div class="score-col"><div class="sc-label">Rủi ro</div>${bar(sc.event_policy_risk||0,15)}<div class="sc-val">${sc.event_policy_risk||0}/15</div>${sc.risk_note?`<div class="sc-note">${sc.risk_note}</div>`:''}</div>
+  </div>
+
+  <!-- BỐI CẢNH -->
+  <div class="divider"><span>🇻🇳 Bối cảnh thị trường</span><div class="divider-line"></div></div>
+  <div class="sec"><div class="sec-text">${raw?.market_context||'—'}</div></div>
+
+  <!-- MACRO CATALYSTS -->
+  ${catalysts.length?`
+  <div class="divider"><span>🔑 Vĩ mô & Catalyst</span><div class="divider-line"></div></div>
+  <div class="sec">
+    <div class="catalyst-grid">
+      ${catalysts.map(c=>`
+      <div class="catalyst-item ${c.impact||'neutral'}">
+        ${impactBadge(c.impact)}
+        <div class="catalyst-title">${c.title||''}</div>
+        <div class="catalyst-detail">${c.detail||''}</div>
+      </div>`).join('')}
+    </div>
+  </div>`:''}
+
+  <!-- ĐA KHUNG -->
+  <div class="divider"><span>📊 Phân tích đa khung thời gian</span><div class="divider-line"></div></div>
+  <div class="sec">
+    <div class="tf-grid">
+      <div class="tf-box"><div class="tf-title tf-w1">📅 Weekly (W1)</div><div class="tf-text">${raw?.weekly_analysis||'—'}</div></div>
+      <div class="tf-box"><div class="tf-title tf-d3">📐 3 ngày (3D)</div><div class="tf-text">${raw?.d3_analysis||'—'}</div></div>
+      <div class="tf-box"><div class="tf-title tf-d1">📈 Daily (D1)</div><div class="tf-text">${raw?.daily_analysis||'—'}</div></div>
+      <div class="tf-box"><div class="tf-title tf-m15">⚡ M15</div><div class="tf-text">${raw?.m15_analysis||'—'}</div></div>
+    </div>
+  </div>
+
+  <!-- DÒNG TIỀN -->
+  <div class="divider"><span>💰 Dòng tiền & Thanh khoản</span><div class="divider-line"></div></div>
+  <div class="sec"><div class="sec-text">${raw?.money_flow||'—'}</div></div>
+
+  <!-- SECTOR ROTATION -->
+  ${(sr.leaders||sr.emerging||sr.hot_caution||sr.avoid)?`
+  <div class="divider"><span>🔄 Sector Rotation</span><div class="divider-line"></div></div>
+  <div class="sec">
+    <div class="sector-grid">
+      <div class="sector-box"><div class="sector-title st-lead">🟢 Dẫn dắt</div>${tags(sr.leaders)}</div>
+      <div class="sector-box"><div class="sector-title st-emerge">🔵 Đang hút tiền</div>${tags(sr.emerging)}</div>
+      <div class="sector-box"><div class="sector-title st-hot">🟡 Tăng nóng – cẩn thận</div>${tags(sr.hot_caution)}</div>
+      <div class="sector-box"><div class="sector-title st-avoid">🔴 Nên tránh FOMO</div>${tags(sr.avoid)}</div>
+    </div>
+  </div>`:''}
+
+  <!-- GÓC NHÌN -->
+  <div class="divider"><span>👁 Góc nhìn</span><div class="divider-line"></div></div>
+  <div class="sec">
+    <div class="two-view">
+      <div class="view-box"><div class="vb-title vb-inst">🏦 Quỹ / Tổ chức</div><div class="vb-text">${raw?.institutional_view||'—'}</div></div>
+      <div class="view-box"><div class="vb-title vb-retail">👤 Trader cá nhân</div><div class="vb-text">${raw?.retail_view||'—'}</div></div>
+    </div>
+  </div>
+
+  <!-- SCENARIOS -->
+  ${scenarios.length?`
+  <div class="divider"><span>📋 Ma trận kịch bản</span><div class="divider-line"></div></div>
+  <div class="sec">
+    <div class="scenario-grid">
+      ${scenarios.map(s=>`
+      <div class="scenario-box ${scenarioBiasClass(s.bias)}">
+        <div class="scenario-header">
+          <span class="scenario-id">${s.id||''}</span>
+          <span class="scenario-prob ${scenarioProbClass(s.bias)}">${s.probability||0}%</span>
+        </div>
+        <div class="scenario-label">${s.label||''}</div>
+        <div class="scenario-field"><div class="sf-key">Điều kiện kích hoạt</div><div class="sf-val">${s.trigger||'—'}</div></div>
+        <div class="scenario-field"><div class="sf-key">Mục tiêu / Hệ quả</div><div class="sf-val">${s.target||'—'}</div></div>
+      </div>`).join('')}
+    </div>
+  </div>`:''}
+
+  <!-- CHIẾN LƯỢC 3 CHÂN TRỜI -->
+  ${(horizon.today||horizon.this_week||horizon.medium_term)?`
+  <div class="divider"><span>⏱ Chiến lược theo chân trời</span><div class="divider-line"></div></div>
+  <div class="sec">
+    <div class="horizon-grid">
+      <div class="horizon-box"><div class="hb-title hb-today">📍 Hôm nay</div><div class="hb-text">${horizon.today||'—'}</div></div>
+      <div class="horizon-box"><div class="hb-title hb-week">📆 Trong tuần</div><div class="hb-text">${horizon.this_week||'—'}</div></div>
+      <div class="horizon-box"><div class="hb-title hb-mid">🎯 Trung hạn (Q2)</div><div class="hb-text">${horizon.medium_term||'—'}</div></div>
+    </div>
+  </div>`:''}
+
+  <!-- CHECKLIST -->
+  ${checklist.filter(c=>c).length?`
+  <div class="divider"><span>✅ Checklist hành động nhanh</span><div class="divider-line"></div></div>
+  <div class="sec">
+    <div class="checklist">
+      ${checklist.filter(c=>c).map((c,i)=>`
+      <div class="checklist-item">
+        <div class="cl-num">${i+1}</div>
+        <div class="cl-text">${c}</div>
+      </div>`).join('')}
+    </div>
+  </div>`:''}
+
+  <!-- KẾ HOẠCH HÀNH ĐỘNG -->
+  <div class="divider"><span>🎯 Kế hoạch hành động</span><div class="divider-line"></div></div>
+  <div class="sec">
+    <div class="action-grid">
+      <div class="action-box"><div class="ab-label">🎯 Vị thế mới</div><div class="ab-text">${ap.new_position||'—'}</div></div>
+      <div class="action-box ab-yellow"><div class="ab-label">📦 Đang nắm giữ</div><div class="ab-text">${ap.if_holding||'—'}</div></div>
+      <div class="action-box ab-red"><div class="ab-label">⚠️ Margin</div><div class="ab-text">${ap.if_using_margin||'—'}</div></div>
+      <div class="action-box"><div class="ab-label">✅ Nhóm ngành ưu tiên</div><div class="ab-text">${ap.priority_sectors||'—'}</div></div>
+      <div class="action-box ab-red"><div class="ab-label">🚫 Tránh FOMO</div><div class="ab-text">${ap.avoid_sectors||'—'}</div></div>
+      <div class="action-box ab-purple"><div class="ab-label">⏳ Đang chờ</div><div class="ab-text">${ap.waiting_for||'—'}</div></div>
+      <div class="action-box ab-blue"><div class="ab-label">🔼 Thesis mạnh lên khi</div><div class="ab-text">${ap.bull_confirm||'—'}</div></div>
+      <div class="action-box ab-red"><div class="ab-label">🔽 Thesis vô hiệu khi</div><div class="ab-text">${ap.bull_invalidate||'—'}</div></div>
+    </div>
+  </div>
+
+  <div class="disclaimer">${raw?.disclaimer||''}</div>
+</div>`;
 }
 
-function buildBiasSparkline(reports, instrument) {
-  // Get last 10 reports of same instrument
-  const series = reports
-    .filter(x => x.instrument === instrument)
-    .slice(0, 10)
-    .reverse()
-    .map(x => x.biasClass === 'bullish' ? 1 : x.biasClass === 'bearish' ? -1 : 0);
-
-  if (series.length < 2) return '';
-
-  const w = 160, h = 32, pad = 2;
-  const stepX = (w - pad * 2) / (series.length - 1);
-  const points = series.map((v, i) => {
-    const x = pad + i * stepX;
-    const y = h / 2 - (v * (h / 2 - pad));
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  }).join(' ');
-
-  const lastV = series[series.length - 1];
-  const color = lastV > 0 ? 'var(--emerald)' : lastV < 0 ? 'var(--rose)' : 'var(--sky)';
-
-  return `
-    <svg class="hero-sparkline" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="sparkGrad" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stop-color="${color}" stop-opacity="0.3"/>
-          <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <polygon points="${points} ${w-pad},${h} ${pad},${h}" fill="url(#sparkGrad)"/>
-    </svg>`;
-}
-
-function renderContent() {
-  const container = document.getElementById('content');
-  const r = filteredReports.find(x => x.id === selectedId);
-
-  if (!r) {
-    container.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">📊</div>
-        <div>Chọn một báo cáo từ danh sách để xem chi tiết</div>
-        ${window.innerWidth <= 1100 ? '<button class="empty-action" onclick="openSheet()">Mở danh sách</button>' : ''}
-      </div>`;
-    return;
-  }
-
-  const tfRows = r.tfRows.length ? r.tfRows.map(row => `
-    <tr>
-      <td class="tf-name">${esc(row.tf)}</td>
-      <td>
-        <span class="tf-trend ${getBiasClass(row.trend)}">${getBiasIcon(getBiasClass(row.trend))} ${esc(row.trend)}</span>
-        <span class="tf-desc">${esc(row.description || '—')}</span>
-      </td>
-    </tr>`).join('') : `<tr><td colspan="2" class="tf-desc">Không có dữ liệu</td></tr>`;
-
-  const levelItems = [
-    ...r.resistance.map(v => ({ type:'Kháng cự', cls:'resistance', price:v })),
-    { type:'Hiện tại', cls:'current', price:r.priceFmt, desc:'Giá hiện tại' },
-    ...r.support.map(v => ({ type:'Hỗ trợ', cls:'support', price:v }))
-  ];
-
-  const matrixRows = r.scenarios.length ? r.scenarios.map(s => `
-    <tr>
-      <td class="mono">${esc(s.key.replace('_scenario',''))}</td>
-      <td><span class="scenario-bias ${getBiasClass(s.bias)}">${esc(s.bias)}</span></td>
-      <td>${esc(s.setup)}</td>
-      <td class="mono">${esc(s.target)}</td>
-      <td class="mono">${esc(s.stop)}</td>
-      <td class="mono">${esc(s.rr)}</td>
-      <td class="mono">${Math.round(s.probability||0)}%</td>
-    </tr>`).join('') : `<tr><td colspan="7">Không có dữ liệu</td></tr>`;
-
-  const execEntries = Object.entries(r.execution).filter(([k]) => !['key_levels','checklist','action_plan','actions'].includes(k));
-
-  // Get persistent checklist state for this report
-  const reportChecks = checklistState[r.id] || {};
-
-  const sparkline = buildBiasSparkline(allReports, r.instrument);
-
-  container.innerHTML = `
-    <div class="hero">
-      <div class="hero-inner">
-        <div class="hero-main">
-          <div class="hero-line">
-            <div class="hero-title">${esc(r.instrument)}</div>
-            <div class="hero-pill">${esc(r.archetype)}</div>
-            <div class="hero-pill ${r.biasClass}">${getBiasIcon(r.biasClass)} ${esc(r.bias)}</div>
-            <div class="hero-pill ${r.confidenceClass}">${esc(safeStr(r.confidence,'N/A'))}</div>
-          </div>
-          <div class="hero-meta">
-            <span>📅 ${esc(r.dateDisplay)}</span>
-            <span>🕐 ${esc(r.timeDisplay)} UTC+7</span>
-            <span>🏷 ${esc(r.id)}</span>
-          </div>
-          <div class="hero-insight">${esc(r.insight)}</div>
-        </div>
-        <div class="hero-price">
-          <div class="hero-price-label">Giá hiện tại</div>
-          <div class="hero-price-value">${esc(r.priceFmt)}</div>
-          <div class="hero-price-time">${esc(fmtTs(r.datetime))}</div>
-          ${sparkline}
-        </div>
-      </div>
-    </div>
-
-    <div class="panel" style="animation-delay:0.05s">
-      <div class="panel-body">
-        <div class="panel-title">Tóm tắt điều hành</div>
-        <div class="summary-grid">
-          <div class="summary-box"><p>${esc(r.insight)}</p></div>
-          <div class="mini-box">
-            <div class="mini-title">Snapshot</div>
-            <div class="mini-kv">
-              <div class="mini-kv-row"><span class="mini-kv-key">Bias</span><span class="mini-kv-val">${esc(r.bias)}</span></div>
-              <div class="mini-kv-row"><span class="mini-kv-key">Confidence</span><span class="mini-kv-val">${esc(safeStr(r.confidence,'N/A'))}</span></div>
-              <div class="mini-kv-row"><span class="mini-kv-key">Instrument</span><span class="mini-kv-val">${esc(r.instrument)}</span></div>
-              <div class="mini-kv-row"><span class="mini-kv-key">Price</span><span class="mini-kv-val gold">${esc(r.priceFmt)}</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel" style="animation-delay:0.1s">
-      <div class="panel-body">
-        <div class="panel-title">Kịch bản giao dịch</div>
-        <div class="scenarios-grid">
-          ${scenarioCard('★ Kịch bản chính','primary',r.primaryScenario)}
-          ${scenarioCard('◈ Kịch bản thay thế','alternative',r.alternativeScenario)}
-          ${scenarioCard('✕ Vô hiệu hóa','invalidation',r.invalidationScenario)}
-        </div>
-      </div>
-    </div>
-
-    <div class="triple-grid">
-      <div class="panel" style="animation-delay:0.15s">
-        <div class="panel-body">
-          <div class="panel-title">Đa khung thời gian</div>
-          <table class="tf-table"><tbody>${tfRows}</tbody></table>
-        </div>
-      </div>
-      <div class="panel" style="animation-delay:0.2s">
-        <div class="panel-body">
-          <div class="panel-title">Vùng giá quan trọng</div>
-          <div class="levels">
-            ${levelItems.map(i => `
-              <div class="level">
-                <span class="dot ${i.cls}"></span>
-                <span class="level-type">${esc(i.type)}</span>
-                <span class="level-price">${esc(i.price)}</span>
-              </div>`).join('')}
-          </div>
-        </div>
-      </div>
-      <div class="panel" style="animation-delay:0.25s">
-        <div class="panel-body">
-          <div class="panel-title">Radar rủi ro</div>
-          <div class="list-stack">
-            ${(r.risks.length ? r.risks : ['Không có rủi ro nào']).map(x => `<div class="list-item risk">${esc(x)}</div>`).join('')}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dual-grid">
-      <div class="panel" style="animation-delay:0.3s">
-        <div class="panel-body">
-          <div class="panel-title">Yếu tố hỗ trợ / áp lực</div>
-          <div class="dual-grid" style="gap:16px">
-            <div>
-              <div style="font-family:var(--font-mono);font-size:10px;color:var(--emerald);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">▲ Hỗ trợ tăng</div>
-              <div class="list-stack">${(r.bullish.length ? r.bullish : ['Không có']).map(x => `<div class="list-item bull">${esc(x)}</div>`).join('')}</div>
-            </div>
-            <div>
-              <div style="font-family:var(--font-mono);font-size:10px;color:var(--rose);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">▼ Áp lực giảm</div>
-              <div class="list-stack">${(r.bearish.length ? r.bearish : ['Không có']).map(x => `<div class="list-item bear">${esc(x)}</div>`).join('')}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="panel" style="animation-delay:0.35s">
-        <div class="panel-body">
-          <div class="panel-title">Sự kiện cần theo dõi</div>
-          <div class="list-stack">
-            ${(r.catalysts.length ? r.catalysts : ['Không có sự kiện']).map(x => `<div class="list-item">${esc(x)}</div>`).join('')}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel" style="animation-delay:0.4s">
-      <div class="panel-body">
-        <div class="panel-title">Ma trận kịch bản</div>
-        <div class="matrix-wrap">
-          <table class="matrix">
-            <thead>
-              <tr>
-                <th>Type</th><th>Bias</th><th>Setup</th><th>Target</th><th>Stop</th><th>R/R</th><th>Probability</th>
-              </tr>
-            </thead>
-            <tbody>${matrixRows}</tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel" style="animation-delay:0.45s">
-      <div class="panel-body">
-        <div class="panel-title">Action plan</div>
-        ${execEntries.length ? `
-          <div class="exec-grid">
-            ${execEntries.map(([k,v]) => `
-              <div class="exec-card">
-                <div class="exec-key">${esc(k.replaceAll('_',' '))}</div>
-                <div class="exec-val">${esc(typeof v === 'object' ? JSON.stringify(v) : safeStr(v))}</div>
-              </div>`).join('')}
-          </div>` : ''}
-        <div class="checklist">
-          ${(r.actionItems.length ? r.actionItems : [
-            'Confirm bias alignment across timeframes',
-            'Check confluence factors',
-            'Verify key level proximity',
-            'Set entry order',
-            'Place stop loss',
-            'Define take profit targets',
-            'Monitor catalyst events'
-          ]).map((x, i) => {
-            const checked = reportChecks[i] ? 'checked' : '';
-            return `
-            <div class="check ${checked}" data-report="${esc(r.id)}" data-idx="${i}">
-              <div class="check-box">✓</div>
-              <div class="check-text">${esc(x)}</div>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>
-    </div>
-  `;
-
-  // Animate probability bars
-  setTimeout(() => {
-    document.querySelectorAll('.prob-fill[data-pct]').forEach(el => {
-      el.style.width = el.dataset.pct + '%';
-    });
-  }, 100);
-
-  // Attach persistent checklist handlers
-  document.querySelectorAll('.check').forEach(el => {
-    el.onclick = () => {
-      const reportId = el.dataset.report;
-      const idx = el.dataset.idx;
-      el.classList.toggle('checked');
-      if (!checklistState[reportId]) checklistState[reportId] = {};
-      checklistState[reportId][idx] = el.classList.contains('checked');
-      saveChecklistState(checklistState);
-    };
+function render(){
+  const filtered=getFiltered(),content=document.getElementById('content');
+  if(!filtered.length){content.innerHTML=`<div class="empty-state"><div class="icon">📭</div><h3>Chưa có báo cáo nào</h3><p>Dữ liệu tự động cập nhật lúc 09:15 và 14:45 các ngày giao dịch.</p></div>`;return;}
+  const groups={};
+  filtered.forEach(r=>{const k=r.date_display||'—';if(!groups[k])groups[k]=[];groups[k].push(r);});
+  let html='',idx=0;
+  Object.entries(groups).forEach(([date,reports])=>{
+    html+=`<div class="day-group"><div class="day-header"><span class="day-header-date">📅 ${date}</span><span class="day-header-count">${reports.length} báo cáo</span></div>${reports.map(r=>buildCard(r,idx++)).join('')}</div>`;
   });
+  content.innerHTML=html;
 }
 
-// ============================================================
-// BOTTOM SHEET
-// ============================================================
-function openSheet() {
-  document.getElementById('sheetBackdrop').classList.add('open');
-  document.getElementById('bottomSheet').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeSheet() {
-  document.getElementById('sheetBackdrop').classList.remove('open');
-  document.getElementById('bottomSheet').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-// Swipe-down to close
-function setupSheetGestures() {
-  const sheet = document.getElementById('bottomSheet');
-  const handle = document.getElementById('sheetHandle');
-  let startY = 0;
-  let currentY = 0;
-  let isDragging = false;
-
-  const handleStart = (y) => {
-    isDragging = true;
-    startY = y;
-    sheet.style.transition = 'none';
-  };
-
-  const handleMove = (y) => {
-    if (!isDragging) return;
-    currentY = y - startY;
-    if (currentY > 0) {
-      sheet.style.transform = `translateY(${currentY}px)`;
-    }
-  };
-
-  const handleEnd = () => {
-    if (!isDragging) return;
-    isDragging = false;
-    sheet.style.transition = '';
-    if (currentY > 100) {
-      closeSheet();
-    } else {
-      sheet.style.transform = '';
-    }
-    currentY = 0;
-  };
-
-  handle.addEventListener('touchstart', (e) => handleStart(e.touches[0].clientY), { passive: true });
-  handle.addEventListener('touchmove', (e) => handleMove(e.touches[0].clientY), { passive: true });
-  handle.addEventListener('touchend', handleEnd);
-
-  handle.addEventListener('mousedown', (e) => handleStart(e.clientY));
-  document.addEventListener('mousemove', (e) => handleMove(e.clientY));
-  document.addEventListener('mouseup', handleEnd);
-}
-
-// ============================================================
-// FAB BADGE (count of unseen reports)
-// ============================================================
-function updateFabBadge() {
-  const badge = document.getElementById('fabBadge');
-  if (filteredReports.length > 0) {
-    badge.textContent = filteredReports.length;
-    badge.style.display = 'flex';
-  } else {
-    badge.style.display = 'none';
-  }
-}
-
-// ============================================================
-// TOAST
-// ============================================================
-function showNewReportToast(report) {
-  const container = document.getElementById('toastContainer');
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.innerHTML = `<div>Báo cáo mới: <strong>${esc(report.instrument)}</strong> · ${esc(report.bias)}</div>`;
-  toast.onclick = () => {
-    selectedId = report.id;
-    renderList();
-    renderContent();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    toast.remove();
-  };
-  container.appendChild(toast);
-  setTimeout(() => toast.remove(), 5000);
-}
-
-// ============================================================
-// KEYBOARD SHORTCUTS
-// ============================================================
-function setupKeyboardShortcuts() {
-  document.addEventListener('keydown', (e) => {
-    // Don't trigger when typing
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
-
-    const idx = filteredReports.findIndex(r => r.id === selectedId);
-
-    if (e.key === 'j' && idx < filteredReports.length - 1) {
-      selectedId = filteredReports[idx + 1].id;
-      renderList();
-      renderContent();
-    } else if (e.key === 'k' && idx > 0) {
-      selectedId = filteredReports[idx - 1].id;
-      renderList();
-      renderContent();
-    } else if (e.key === '/') {
-      e.preventDefault();
-      document.getElementById('searchInput')?.focus();
-    } else if (e.key === 'Escape') {
-      closeSheet();
-    }
-  });
-}
-
-// ============================================================
-// SMART POLLING (pause when hidden)
-// ============================================================
-function startPolling() {
-  stopPolling();
-  pollTimer = setInterval(() => loadReports(true), 60000);
-}
-function stopPolling() {
-  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
-}
-
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    stopPolling();
-  } else {
-    loadReports(true);
-    startPolling();
-  }
-});
-
-// Update relative time every 30s
-setInterval(() => {
-  if (allReports.length > 0) {
-    document.getElementById('lastUpdated').textContent = fmtRelativeTime(allReports[0].datetime);
-  }
-}, 30000);
-
-// ============================================================
-// INIT
-// ============================================================
-window.addEventListener('scroll', () => {
-  const btn = document.getElementById('scrollTop');
-  if (window.scrollY > 320) btn.classList.add('visible');
-  else btn.classList.remove('visible');
-});
-
-document.getElementById('fabBtn').addEventListener('click', openSheet);
-document.getElementById('sheetClose').addEventListener('click', closeSheet);
-document.getElementById('sheetBackdrop').addEventListener('click', closeSheet);
-
-setupSheetGestures();
-setupKeyboardShortcuts();
-
-loadReports(false);
-startPolling();
+loadData();
+setInterval(loadData,5*60*1000);
 </script>
 </body>
 </html>
