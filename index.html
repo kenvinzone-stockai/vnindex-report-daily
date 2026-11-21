@@ -1,527 +1,2429 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KenvinZone – VNINDEX Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KenvinZone VNINDEX · Bảng Chiến Lược Chứng Khoán Việt Nam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+<script>
+(function(){
+  try {
+    var m = document.cookie.match(/(?:^|;\s*)kz-theme=(dark|light)/);
+    var t = (m && m[1]) || localStorage.getItem('kz-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  } catch(_) {}
+})();
+</script>
 <style>
+/* ============================================================
+   KENVINZONE UNIFIED FLAGSHIP LAYER — VNINDEX STRATEGY DESK
+   ============================================================ */
 :root {
-  --green-700:#15803d;--green-600:#16a34a;--green-500:#22c55e;--green-400:#4ade80;--green-300:#86efac;
-  --red-500:#ef4444;--red-400:#f87171;--yellow-400:#facc15;--orange-400:#fb923c;
-  --purple-400:#a78bfa;--blue-400:#60a5fa;--teal-400:#2dd4bf;
-  --gray-950:#030712;--gray-900:#111827;--gray-800:#1f2937;--gray-700:#374151;
-  --gray-600:#4b5563;--gray-400:#9ca3af;--gray-300:#d1d5db;--gray-200:#e5e7eb;
-  --font-main:'Be Vietnam Pro',sans-serif;--font-mono:'JetBrains Mono',monospace;
+  --kz-bg: #070F1D;
+  --kz-bg-2: #0A1426;
+  --kz-surface: rgba(16, 29, 53, 0.80);
+  --kz-surface-solid: #101D35;
+  --kz-surface-2: rgba(20, 36, 66, 0.90);
+  --kz-text: #EDF2FA;
+  --kz-text-soft: #B9C7DE;
+  --kz-muted: #7C92B4;
+  --kz-border: rgba(148, 179, 224, 0.14);
+  --kz-border-strong: rgba(56, 213, 231, 0.34);
+
+  --kz-cyan: #38D5E7;
+  --kz-gold: #F3BE62;
+  --kz-green: #34D399;
+  --kz-rose: #FB7185;
+  --kz-purple: #A78BFA;
+  --kz-orange: #FB923C;
+  --kz-blue: #60A5FA;
+
+  --kz-green-bg: rgba(52, 211, 153, 0.12);
+  --kz-rose-bg: rgba(251, 113, 133, 0.12);
+  --kz-cyan-bg: rgba(56, 213, 231, 0.12);
+  --kz-gold-bg: rgba(243, 190, 98, 0.13);
+  --kz-purple-bg: rgba(167, 139, 250, 0.13);
+  --kz-orange-bg: rgba(251, 146, 60, 0.13);
+
+  --kz-font: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+  --kz-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --kz-radius: 16px;
+  --kz-header-h: 64px;
+  --kz-sidebar-w: 336px;
+  --kz-shadow: 0 18px 46px -18px rgba(0, 0, 0, 0.65);
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:var(--font-main);background:var(--gray-950);color:#fff;min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 20% 0%,rgba(21,128,61,0.12) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 100%,rgba(22,163,74,0.06) 0%,transparent 60%);pointer-events:none;z-index:0;}
-.container{max-width:1200px;margin:0 auto;padding:0 24px;position:relative;z-index:1;}
 
-/* HEADER */
-header{border-bottom:1px solid rgba(34,197,94,0.15);padding:16px 0;position:sticky;top:0;background:rgba(3,7,18,0.95);backdrop-filter:blur(20px);z-index:100;}
-.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;}
-.logo{display:flex;align-items:center;gap:12px;}
-.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--green-600),var(--green-400));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
-.logo-text{font-size:17px;font-weight:800;letter-spacing:-0.5px;}
-.logo-text span{color:var(--green-400);}
-.logo-sub{font-size:11px;color:var(--gray-400);margin-top:1px;}
-.header-right{display:flex;align-items:center;gap:12px;}
-.live-badge{display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--green-400);}
-.live-dot{width:6px;height:6px;background:var(--green-400);border-radius:50%;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
-.last-update{font-size:11px;color:var(--gray-400);font-family:var(--font-mono);}
+[data-theme="light"] {
+  --kz-bg: #F3F6FB;
+  --kz-bg-2: #FFFFFF;
+  --kz-surface: rgba(255, 255, 255, 0.94);
+  --kz-surface-solid: #FFFFFF;
+  --kz-surface-2: #EEF3FA;
+  --kz-text: #0F172A;
+  --kz-text-soft: #334155;
+  --kz-muted: #64748B;
+  --kz-border: rgba(15, 23, 42, 0.10);
+  --kz-border-strong: rgba(14, 116, 144, 0.35);
+  --kz-cyan: #0891B2;
+  --kz-gold: #B45309;
+  --kz-green: #059669;
+  --kz-rose: #E11D48;
+  --kz-shadow: 0 12px 30px -14px rgba(15, 23, 42, 0.12);
+}
 
-/* STATS */
-.stats-bar{display:flex;gap:12px;padding:16px 0 8px;flex-wrap:wrap;}
-.stat-item{background:var(--gray-900);border:1px solid var(--gray-800);border-radius:10px;padding:10px 18px;display:flex;align-items:center;gap:10px;}
-.stat-val{font-size:22px;font-weight:800;font-family:var(--font-mono);}
-.sv-g{color:var(--green-400);}.sv-r{color:var(--red-400);}.sv-y{color:var(--yellow-400);}.sv-w{color:var(--green-300);}
-.stat-label{font-size:12px;color:var(--gray-400);font-weight:500;}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-/* FILTERS */
-.filter-bar{display:flex;align-items:center;gap:10px;padding:8px 0 16px;flex-wrap:wrap;}
-.filter-label{font-size:13px;color:var(--gray-400);font-weight:500;}
-.filter-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--gray-700);background:var(--gray-800);color:var(--gray-400);font-size:13px;font-family:var(--font-main);cursor:pointer;transition:all 0.2s;font-weight:500;}
-.filter-btn:hover{border-color:var(--green-600);color:var(--green-400);}
-.filter-btn.active{background:rgba(34,197,94,0.12);border-color:var(--green-500);color:var(--green-400);}
-.filter-select{padding:6px 14px;border-radius:8px;border:1px solid var(--gray-700);background:var(--gray-800);color:#fff;font-size:13px;font-family:var(--font-main);cursor:pointer;outline:none;}
+body {
+  font-family: var(--kz-font);
+  background: var(--kz-bg);
+  color: var(--kz-text);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
 
-/* DAY GROUP */
-.day-group{margin-bottom:32px;}
-.day-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:10px 16px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.12);border-radius:10px;}
-.day-header-date{font-size:14px;font-weight:700;color:var(--green-400);font-family:var(--font-mono);}
-.day-header-count{font-size:12px;color:var(--gray-400);background:var(--gray-800);padding:2px 10px;border-radius:10px;}
+/* Ambient Background Glow */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(640px 420px at 14% 6%, rgba(56, 213, 231, 0.085), transparent 60%),
+    radial-gradient(540px 380px at 88% 12%, rgba(52, 211, 153, 0.075), transparent 60%),
+    radial-gradient(600px 440px at 50% 95%, rgba(243, 190, 98, 0.055), transparent 65%);
+}
+[data-theme="light"] body::before { opacity: 0.45; }
 
-/* REPORT CARD */
-.report-card{background:var(--gray-900);border:1px solid var(--gray-800);border-radius:16px;overflow:hidden;margin-bottom:24px;transition:border-color 0.2s;animation:fadeIn 0.4s ease both;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.report-card:hover{border-color:rgba(34,197,94,0.25);}
+.mono { font-family: var(--kz-mono); font-variant-numeric: tabular-nums; }
 
-/* TOPBAR */
-.card-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--gray-800);flex-wrap:wrap;gap:10px;}
-.card-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.chip{font-family:var(--font-mono);font-size:12px;font-weight:700;padding:3px 10px;border-radius:6px;}
-.chip-vnindex{color:var(--green-400);background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);}
-.chip-price{color:var(--green-300);font-size:13px;font-weight:600;}
-.chip-dt{font-size:12px;color:var(--gray-400);font-family:var(--font-mono);}
-.chip-session{font-size:11px;font-weight:700;color:var(--yellow-400);background:rgba(250,204,21,0.1);padding:3px 10px;border-radius:6px;border:1px solid rgba(250,204,21,0.2);}
-.chip-id{font-size:11px;color:var(--gray-600);font-family:var(--font-mono);}
+/* Scroll Progress Telemetry Beam */
+.kz-scroll-beam {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--kz-green), var(--kz-cyan), var(--kz-gold));
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 9999;
+  pointer-events: none;
+}
 
-/* HERO */
-.card-hero{display:grid;grid-template-columns:1fr 200px;border-bottom:1px solid var(--gray-800);}
-.hero-qv{padding:20px;border-right:1px solid var(--gray-800);}
-.sec-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-400);margin-bottom:8px;}
-.qv-text{font-size:14px;line-height:1.75;color:var(--gray-200);}
-.hero-score{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:10px;}
-.score-ring{position:relative;width:76px;height:76px;}
-.score-ring svg{transform:rotate(-90deg);}
-.score-ring circle{fill:none;stroke-width:7;stroke-linecap:round;}
-.score-ring .bg{stroke:var(--gray-800);}
-.score-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;font-family:var(--font-mono);}
-.action-label{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;text-align:center;}
-.al-buy{background:rgba(34,197,94,0.15);color:var(--green-400);border:1px solid rgba(34,197,94,0.3);}
-.al-hold{background:rgba(250,204,21,0.12);color:var(--yellow-400);border:1px solid rgba(250,204,21,0.25);}
-.al-reduce{background:rgba(239,68,68,0.12);color:var(--red-400);border:1px solid rgba(239,68,68,0.25);}
-.al-profit{background:rgba(251,146,60,0.12);color:var(--orange-400);border:1px solid rgba(251,146,60,0.25);}
-.al-watch{background:rgba(139,92,246,0.12);color:var(--purple-400);border:1px solid rgba(139,92,246,0.25);}
-.al-avoid{background:rgba(239,68,68,0.08);color:var(--red-400);border:1px solid rgba(239,68,68,0.18);}
-.action-prob{font-size:11px;color:var(--gray-400);font-family:var(--font-mono);}
+/* ============================================================
+   HEADER + ECOSYSTEM DOCK
+   ============================================================ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 120;
+  height: var(--kz-header-h);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: rgba(7, 15, 29, 0.86);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--kz-border);
+}
+[data-theme="light"] .header { background: rgba(255, 255, 255, 0.90); }
 
-/* SCORING */
-.scoring-row{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--gray-800);}
-.score-col{padding:12px 14px;border-right:1px solid var(--gray-800);}
-.score-col:last-child{border-right:none;}
-.sc-label{font-size:10px;color:var(--gray-400);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;}
-.sc-bar-bg{height:4px;background:var(--gray-800);border-radius:2px;overflow:hidden;margin-bottom:4px;}
-.sc-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green-700),var(--green-400));}
-.sc-val{font-size:12px;font-weight:700;font-family:var(--font-mono);color:var(--green-400);}
-.sc-note{font-size:11px;color:var(--gray-400);line-height:1.5;margin-top:4px;}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  flex-shrink: 0;
+}
+.brand-mark {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, rgba(52,211,153,0.18), rgba(56,213,231,0.18));
+  border: 1px solid rgba(56,213,231,0.34);
+  font-size: 16px;
+}
+.brand-name {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.brand-name span { color: var(--kz-cyan); }
+.brand-badge {
+  font-family: var(--kz-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.13);
+  color: var(--kz-green);
+  border: 1px solid rgba(52, 211, 153, 0.32);
+  white-space: nowrap;
+}
 
-/* DIVIDER */
-.divider{display:flex;align-items:center;gap:10px;padding:9px 20px;background:rgba(34,197,94,0.04);border-bottom:1px solid var(--gray-800);}
-.divider span{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--green-500);white-space:nowrap;}
-.divider-line{flex:1;height:1px;background:var(--gray-800);}
+/* Ecosystem Navigation Dock */
+.eco-dock {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(16, 29, 53, 0.72);
+  border: 1px solid var(--kz-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.eco-dock::-webkit-scrollbar { display: none; }
+[data-theme="light"] .eco-dock { background: #EEF3FA; }
 
-/* SECTIONS */
-.sec{padding:16px 20px;border-bottom:1px solid var(--gray-800);}
-.sec:last-child{border-bottom:none;}
-.sec-text{font-size:14px;line-height:1.75;color:var(--gray-300);}
+.eco-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--kz-text-soft);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  border: 1px solid transparent;
+}
+.eco-pill:hover {
+  color: var(--kz-text);
+  background: rgba(56, 213, 231, 0.10);
+}
+.eco-pill.active {
+  background: linear-gradient(135deg, rgba(52,211,153,0.20), rgba(56,213,231,0.16));
+  color: var(--kz-text);
+  border-color: rgba(52,211,153,0.42);
+  font-weight: 700;
+}
+.eco-pill.gold { color: var(--kz-gold); }
 
-/* MACRO CATALYSTS */
-.catalyst-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;}
-.catalyst-item{background:var(--gray-800);border-radius:10px;padding:13px 15px;border-left:3px solid var(--gray-600);}
-.catalyst-item.positive{border-left-color:var(--green-500);}
-.catalyst-item.negative{border-left-color:var(--red-500);}
-.catalyst-item.neutral{border-left-color:var(--yellow-400);}
-.catalyst-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:5px;}
-.catalyst-detail{font-size:12px;color:var(--gray-300);line-height:1.6;}
-.catalyst-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;}
-.cb-pos{background:rgba(34,197,94,0.15);color:var(--green-400);}
-.cb-neg{background:rgba(239,68,68,0.15);color:var(--red-400);}
-.cb-neu{background:rgba(250,204,21,0.15);color:var(--yellow-400);}
+/* Mobile Ecosystem Strip */
+.eco-mobile-strip {
+  display: none;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--kz-bg-2);
+  border-bottom: 1px solid var(--kz-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.eco-mobile-strip::-webkit-scrollbar { display: none; }
 
-/* TF GRID */
-.tf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.tf-box{background:var(--gray-800);border-radius:10px;padding:14px 16px;}
-.tf-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
-.tf-w1{color:#818cf8;}.tf-d3{color:#38bdf8;}.tf-d1{color:var(--green-400);}.tf-m15{color:var(--yellow-400);}
-.tf-text{font-size:13px;color:var(--gray-300);line-height:1.65;}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--kz-green-bg);
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  font-family: var(--kz-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--kz-green);
+}
+.live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--kz-green);
+  animation: kzPulse 2s infinite;
+}
+@keyframes kzPulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.75); }
+}
+.last-sync {
+  font-family: var(--kz-mono);
+  font-size: 11px;
+  color: var(--kz-muted);
+  white-space: nowrap;
+}
+.icon-btn {
+  height: 34px;
+  min-width: 34px;
+  padding: 0 9px;
+  border-radius: 10px;
+  border: 1px solid var(--kz-border);
+  background: var(--kz-surface);
+  color: var(--kz-text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--kz-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+.icon-btn:hover { border-color: var(--kz-cyan); background: var(--kz-cyan-bg); }
+.icon-btn.spinning svg { animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* SECTOR ROTATION */
-.sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.sector-box{background:var(--gray-800);border-radius:10px;padding:12px 14px;}
-.sector-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;}
-.st-lead{color:var(--green-400);}.st-emerge{color:var(--teal-400);}.st-hot{color:var(--yellow-400);}.st-avoid{color:var(--red-400);}
-.sector-tag{display:inline-block;font-size:12px;color:var(--gray-300);background:var(--gray-700);padding:3px 8px;border-radius:6px;margin:2px 2px 2px 0;}
+/* ============================================================
+   APP SHELL: SIDEBAR + COMMAND STAGE
+   ============================================================ */
+.shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: var(--kz-sidebar-w) minmax(0, 1fr);
+  min-height: calc(100vh - var(--kz-header-h));
+}
 
-/* TWO VIEW */
-.two-view{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.view-box{background:var(--gray-800);border-radius:10px;padding:14px 16px;}
-.vb-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
-.vb-inst{color:var(--green-400);}.vb-retail{color:var(--blue-400);}
-.vb-text{font-size:13px;color:var(--gray-300);line-height:1.65;}
+/* SIDEBAR */
+.sidebar {
+  position: sticky;
+  top: var(--kz-header-h);
+  height: calc(100vh - var(--kz-header-h));
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 20, 38, 0.78);
+  border-right: 1px solid var(--kz-border);
+  overflow: hidden;
+}
+[data-theme="light"] .sidebar { background: #FFFFFF; }
 
-/* SCENARIOS */
-.scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.scenario-box{background:var(--gray-800);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden;}
-.scenario-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-.sb-bull::before{background:var(--green-500);}
-.sb-bear::before{background:var(--red-500);}
-.sb-neutral::before{background:var(--yellow-400);}
-.scenario-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.scenario-id{font-size:11px;font-weight:800;font-family:var(--font-mono);color:var(--gray-400);}
-.scenario-prob{font-size:18px;font-weight:800;font-family:var(--font-mono);}
-.sp-bull{color:var(--green-400);}.sp-bear{color:var(--red-400);}.sp-neutral{color:var(--yellow-400);}
-.scenario-label{font-size:13px;font-weight:700;color:#fff;margin-bottom:8px;}
-.scenario-field{margin-bottom:6px;}
-.sf-key{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--gray-400);margin-bottom:2px;}
-.sf-val{font-size:12px;color:var(--gray-300);line-height:1.5;}
+.sb-top {
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid var(--kz-border);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.search-input {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--kz-border);
+  background: rgba(7, 15, 29, 0.65);
+  color: var(--kz-text);
+  font-family: var(--kz-font);
+  font-size: 12.5px;
+  outline: none;
+  transition: border-color 0.18s ease;
+}
+[data-theme="light"] .search-input { background: #F1F5F9; }
+.search-input:focus { border-color: var(--kz-cyan); }
+.search-input::placeholder { color: var(--kz-muted); }
 
-/* HORIZON */
-.horizon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.horizon-box{background:var(--gray-800);border-radius:10px;padding:14px 16px;}
-.hb-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
-.hb-today{color:var(--yellow-400);}.hb-week{color:var(--green-400);}.hb-mid{color:var(--blue-400);}
-.hb-text{font-size:13px;color:var(--gray-300);line-height:1.65;}
+.sb-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sb-select {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--kz-border);
+  background: rgba(7, 15, 29, 0.65);
+  color: var(--kz-text);
+  font-family: var(--kz-font);
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+[data-theme="light"] .sb-select { background: #F1F5F9; }
 
-/* CHECKLIST */
-.checklist{display:flex;flex-direction:column;gap:8px;}
-.checklist-item{display:flex;align-items:flex-start;gap:10px;background:var(--gray-800);border-radius:8px;padding:10px 14px;}
-.cl-num{width:22px;height:22px;border-radius:50%;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--green-400);flex-shrink:0;font-family:var(--font-mono);}
-.cl-text{font-size:13px;color:var(--gray-300);line-height:1.6;}
+.adv-toggle {
+  padding: 7px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--kz-border);
+  background: transparent;
+  color: var(--kz-text-soft);
+  font-family: var(--kz-font);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+.adv-toggle:hover, .adv-toggle.open { border-color: var(--kz-cyan); color: var(--kz-cyan); }
 
-/* ACTION PLAN */
-.action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.action-box{background:var(--gray-800);border-radius:10px;padding:13px 15px;border-left:3px solid var(--green-600);}
-.ab-red{border-left-color:var(--red-500);}
-.ab-yellow{border-left-color:var(--yellow-400);}
-.ab-purple{border-left-color:var(--purple-400);}
-.ab-blue{border-left-color:var(--blue-400);}
-.ab-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray-400);margin-bottom:6px;}
-.ab-text{font-size:13px;color:var(--gray-200);line-height:1.6;}
+.adv-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+.adv-box.collapsed { display: none; }
 
-.disclaimer{font-size:11px;color:var(--gray-600);font-style:italic;padding:12px 20px;border-top:1px solid var(--gray-800);}
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.chip {
+  padding: 4px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--kz-border);
+  background: rgba(16, 29, 53, 0.55);
+  color: var(--kz-text-soft);
+  font-family: var(--kz-font);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+[data-theme="light"] .chip { background: #F1F5F9; }
+.chip:hover { border-color: var(--kz-cyan); color: var(--kz-text); }
+.chip.active {
+  background: var(--kz-cyan-bg);
+  border-color: var(--kz-cyan);
+  color: var(--kz-cyan);
+}
 
-/* EMPTY/LOADING */
-.empty-state{text-align:center;padding:80px 20px;color:var(--gray-400);}
-.empty-state .icon{font-size:48px;margin-bottom:16px;opacity:0.4;}
-.empty-state h3{font-size:18px;margin-bottom:8px;color:var(--gray-200);}
-.loading{text-align:center;padding:60px;color:var(--gray-400);}
-.spinner{width:30px;height:30px;border:3px solid var(--gray-800);border-top-color:var(--green-500);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* Compact KPI Strip in Sidebar */
+.sb-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.sb-stat {
+  background: rgba(7, 15, 29, 0.55);
+  border: 1px solid var(--kz-border);
+  border-radius: 9px;
+  padding: 6px 4px;
+  text-align: center;
+}
+[data-theme="light"] .sb-stat { background: #F8FAFC; }
+.sb-stat-v { font-family: var(--kz-mono); font-size: 14px; font-weight: 800; line-height: 1.15; }
+.sb-stat-k { font-size: 9.5px; color: var(--kz-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
 
-@media(max-width:900px){
-  .card-hero{grid-template-columns:1fr;}
-  .hero-qv{border-right:none;border-bottom:1px solid var(--gray-800);}
-  .hero-score{flex-direction:row;padding:16px 20px;}
-  .scoring-row{grid-template-columns:repeat(2,1fr);}
-  .tf-grid,.two-view,.scenario-grid,.horizon-grid,.sector-grid{grid-template-columns:1fr;}
-  .action-grid{grid-template-columns:1fr;}
-  .logo-sub{display:none;}
+/* Sidebar Report List (Flex Column, Anti-Squish!) */
+.report-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.report-list::-webkit-scrollbar { width: 5px; }
+.report-list::-webkit-scrollbar-thumb { background: rgba(148,179,224,0.22); border-radius: 99px; }
+
+.date-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--kz-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--kz-muted);
+  padding: 6px 4px 2px;
+  flex-shrink: 0;
+}
+.date-cnt {
+  background: var(--kz-surface);
+  border: 1px solid var(--kz-border);
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+}
+
+.report-item {
+  flex-shrink: 0;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--kz-border);
+  background: rgba(16, 29, 53, 0.52);
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+[data-theme="light"] .report-item { background: #F8FAFC; }
+.report-item:hover {
+  border-color: rgba(56, 213, 231, 0.40);
+  background: rgba(20, 36, 66, 0.82);
+}
+[data-theme="light"] .report-item:hover { background: #EEF6FA; }
+.report-item.active {
+  border-color: var(--kz-cyan);
+  background: linear-gradient(135deg, rgba(56, 213, 231, 0.14), rgba(52, 211, 153, 0.08));
+  box-shadow: 0 0 0 1px rgba(56, 213, 231, 0.25);
+}
+
+.ri-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.ri-price {
+  font-family: var(--kz-mono);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--kz-text);
+}
+.ri-time {
+  font-family: var(--kz-mono);
+  font-size: 11px;
+  color: var(--kz-muted);
+}
+.ri-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+.ri-snippet {
+  font-size: 11.8px;
+  color: var(--kz-text-soft);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--kz-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2.5px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.al-buy { background: var(--kz-green-bg); color: var(--kz-green); border-color: rgba(52,211,153,0.34); }
+.al-hold { background: var(--kz-gold-bg); color: var(--kz-gold); border-color: rgba(243,190,98,0.34); }
+.al-watch { background: var(--kz-purple-bg); color: var(--kz-purple); border-color: rgba(167,139,250,0.34); }
+.al-profit { background: var(--kz-orange-bg); color: var(--kz-orange); border-color: rgba(251,146,60,0.34); }
+.al-reduce, .al-avoid { background: var(--kz-rose-bg); color: var(--kz-rose); border-color: rgba(251,113,133,0.34); }
+.score-pill { background: var(--kz-cyan-bg); color: var(--kz-cyan); border-color: rgba(56,213,231,0.28); }
+
+/* ============================================================
+   MAIN CONTENT AREA
+   ============================================================ */
+.main {
+  padding: 20px 24px 64px;
+  max-width: 1160px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Quick Session Switcher Bar */
+.quick-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.quick-pills { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.qa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border-radius: 10px;
+  border: 1px solid var(--kz-border);
+  background: var(--kz-surface);
+  color: var(--kz-text-soft);
+  font-family: var(--kz-font);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.qa-btn:hover { border-color: var(--kz-cyan); color: var(--kz-text); }
+.qa-btn.active {
+  border-color: var(--kz-green);
+  background: var(--kz-green-bg);
+  color: var(--kz-text);
+}
+.session-meta-pill {
+  font-family: var(--kz-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--kz-surface);
+  border: 1px solid var(--kz-border);
+  color: var(--kz-text-soft);
+}
+
+/* HERO CARD */
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid var(--kz-border-strong);
+  background: linear-gradient(145deg, rgba(16, 29, 53, 0.94), rgba(10, 20, 38, 0.96));
+  box-shadow: var(--kz-shadow);
+  padding: 24px 26px;
+}
+[data-theme="light"] .hero { background: linear-gradient(145deg, #FFFFFF, #F1F6FC); }
+
+#kzHeroCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.72;
+}
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 238px;
+  gap: 24px;
+  align-items: center;
+}
+.hero-top-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.hero-title {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  background: linear-gradient(90deg, #FFFFFF, #38D5E7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+[data-theme="light"] .hero-title { background: linear-gradient(90deg, #0F172A, #0891B2); -webkit-background-clip: text; background-clip: text; }
+
+.hero-price-inline {
+  font-family: var(--kz-mono);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--kz-gold);
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: var(--kz-mono);
+  font-size: 11.5px;
+  color: var(--kz-muted);
+  margin-bottom: 14px;
+}
+.hero-qv {
+  font-size: 14.5px;
+  line-height: 1.72;
+  color: var(--kz-text);
+  padding: 13px 16px;
+  border-radius: 12px;
+  background: rgba(7, 15, 29, 0.50);
+  border-left: 3px solid var(--kz-cyan);
+  margin-bottom: 16px;
+}
+[data-theme="light"] .hero-qv { background: #F8FAFC; }
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.kz-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border-radius: 11px;
+  border: 1px solid var(--kz-border);
+  background: var(--kz-surface-2);
+  color: var(--kz-text);
+  font-family: var(--kz-font);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.16s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.kz-btn:hover { transform: translateY(-1px); border-color: var(--kz-cyan); }
+.kz-btn.primary {
+  background: linear-gradient(135deg, #0EA5E9, #38D5E7);
+  color: #04111F;
+  border-color: transparent;
+}
+.kz-btn.gold {
+  background: linear-gradient(135deg, #D97706, #F3BE62);
+  color: #1A1002;
+  border-color: transparent;
+}
+
+/* Hero Composite Score Box */
+.hero-score-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px 16px;
+  border-radius: 16px;
+  background: rgba(7, 15, 29, 0.65);
+  border: 1px solid var(--kz-border);
+  text-align: center;
+}
+[data-theme="light"] .hero-score-card { background: #F8FAFC; }
+
+.score-ring-wrap {
+  position: relative;
+  width: 106px;
+  height: 106px;
+}
+.score-ring-svg { width: 106px; height: 106px; transform: rotate(-90deg); }
+.score-ring-bg { fill: none; stroke: rgba(148, 179, 224, 0.14); stroke-width: 8; }
+.score-ring-fg {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.score-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.score-ring-num {
+  font-family: var(--kz-mono);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+.score-ring-max {
+  font-family: var(--kz-mono);
+  font-size: 10px;
+  color: var(--kz-muted);
+  margin-top: 2px;
+}
+.hero-sparkline { width: 100%; height: 32px; margin-top: 4px; }
+
+/* ============================================================
+   PANELS & POINTER SPOTLIGHT
+   ============================================================ */
+.panel {
+  position: relative;
+  border-radius: var(--kz-radius);
+  border: 1px solid var(--kz-border);
+  background: var(--kz-surface);
+  box-shadow: var(--kz-shadow);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+.panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(380px circle at var(--mx, -400px) var(--my, -400px), rgba(56, 213, 231, 0.08), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.panel:hover::after { opacity: 1; }
+.panel-body { position: relative; z-index: 2; padding: 20px 22px; }
+.panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--kz-mono);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--kz-cyan);
+  margin-bottom: 16px;
+}
+.panel-title::before {
+  content: '';
+  display: inline-block;
+  width: 3px; height: 14px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--kz-cyan), var(--kz-green));
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.panel-title-left { display: flex; align-items: center; }
+
+/* 5-PILLAR SCORING GRID */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+.pillar-card {
+  padding: 13px 14px;
+  border-radius: 12px;
+  background: rgba(7, 15, 29, 0.52);
+  border: 1px solid var(--kz-border);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+[data-theme="light"] .pillar-card { background: #F8FAFC; }
+.pillar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.pillar-name {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--kz-muted);
+}
+.pillar-val {
+  font-family: var(--kz-mono);
+  font-size: 13px;
+  font-weight: 800;
+}
+.pillar-track {
+  height: 5px;
+  border-radius: 99px;
+  background: rgba(148, 179, 224, 0.14);
+  overflow: hidden;
+}
+.pillar-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 99px;
+  transition: width 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pillar-note {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--kz-text-soft);
+}
+
+/* ============================================================
+   FLAGSHIP ASYMMETRIC SCENARIO COMMAND STAGE
+   ============================================================ */
+@property --kz-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes kzOrbit { to { --kz-angle: 360deg; } }
+
+.scenarios-stage {
+  display: grid;
+  grid-template-columns: 1.38fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+.sc-primary-wrap {
+  position: relative;
+  border-radius: 18px;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(243,190,98,0.45), rgba(56,213,231,0.35));
+}
+.sc-primary-wrap.tier-high {
+  background: linear-gradient(135deg, rgba(56,213,231,0.75), rgba(52,211,153,0.65));
+  box-shadow: 0 0 32px -10px rgba(56, 213, 231, 0.45);
+}
+.sc-primary-wrap.tier-ultra {
+  background: conic-gradient(from var(--kz-angle), #34D399, #38D5E7, #F3BE62, #34D399);
+  animation: kzOrbit 4.5s linear infinite;
+  box-shadow: 0 0 42px -10px rgba(52, 211, 153, 0.55);
+}
+.sc-primary-wrap.tier-bear {
+  background: conic-gradient(from var(--kz-angle), #FB7185, #F3BE62, #FB7185);
+  animation: kzOrbit 5.5s linear infinite;
+  box-shadow: 0 0 36px -10px rgba(251, 113, 133, 0.48);
+}
+
+.sc-primary-card {
+  height: 100%;
+  border-radius: 16px;
+  background: linear-gradient(155deg, rgba(16, 29, 53, 0.98), rgba(8, 16, 30, 0.99));
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+}
+[data-theme="light"] .sc-primary-card { background: #FFFFFF; }
+
+.sc-top-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.sc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--kz-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+.sc-pill.bull { background: var(--kz-green-bg); color: var(--kz-green); border: 1px solid rgba(52,211,153,0.35); }
+.sc-pill.bear { background: var(--kz-rose-bg); color: var(--kz-rose); border: 1px solid rgba(251,113,133,0.35); }
+.sc-pill.neutral { background: var(--kz-gold-bg); color: var(--kz-gold); border: 1px solid rgba(243,190,98,0.35); }
+
+.sc-hero-label {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--kz-text);
+}
+
+.prob-ring-box {
+  position: relative;
+  width: 82px;
+  height: 82px;
+  flex-shrink: 0;
+}
+.prob-ring-svg { width: 82px; height: 82px; transform: rotate(-90deg); }
+.prob-ring-bg { fill: none; stroke: rgba(148,179,224,0.16); stroke-width: 7; }
+.prob-ring-fg {
+  fill: none;
+  stroke-width: 7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.prob-ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.prob-ring-num { font-family: var(--kz-mono); font-size: 19px; font-weight: 800; line-height: 1; }
+.prob-ring-lbl { font-size: 9px; color: var(--kz-muted); text-transform: uppercase; margin-top: 2px; }
+
+.sc-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.sc-detail-box {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(7, 15, 29, 0.56);
+  border: 1px solid var(--kz-border);
+}
+[data-theme="light"] .sc-detail-box { background: #F8FAFC; }
+.sc-detail-k {
+  font-family: var(--kz-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--kz-muted);
+  margin-bottom: 5px;
+}
+.sc-detail-v { font-size: 13px; color: var(--kz-text); line-height: 1.55; }
+
+.scenarios-secondary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.scenario-card {
+  flex: 1;
+  padding: 15px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--kz-border);
+  background: rgba(16, 29, 53, 0.62);
+  border-top: 3px solid var(--kz-gold);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+[data-theme="light"] .scenario-card { background: #F8FAFC; }
+.scenario-card.bull { border-top-color: var(--kz-green); }
+.scenario-card.bear { border-top-color: var(--kz-rose); }
+.scenario-card.neutral { border-top-color: var(--kz-gold); }
+
+.sc-sec-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sc-sec-id { font-family: var(--kz-mono); font-size: 11px; font-weight: 800; color: var(--kz-muted); }
+.sc-sec-prob { font-family: var(--kz-mono); font-size: 16px; font-weight: 800; }
+.sc-sec-prob.bull { color: var(--kz-green); }
+.sc-sec-prob.bear { color: var(--kz-rose); }
+.sc-sec-prob.neutral { color: var(--kz-gold); }
+.sc-sec-title { font-size: 13.5px; font-weight: 700; color: var(--kz-text); }
+.sc-sec-line { font-size: 12px; color: var(--kz-text-soft); line-height: 1.5; }
+.sc-sec-line strong { color: var(--kz-muted); font-size: 10.5px; text-transform: uppercase; font-family: var(--kz-mono); margin-right: 4px; }
+
+.prob-track { height: 4px; border-radius: 99px; background: rgba(148,179,224,0.14); overflow: hidden; margin-top: 4px; }
+.prob-fill { height: 100%; width: 0; border-radius: 99px; transition: width 0.85s cubic-bezier(0.22, 1, 0.36, 1); }
+.prob-fill.bull { background: var(--kz-green); }
+.prob-fill.bear { background: var(--kz-rose); }
+.prob-fill.neutral { background: var(--kz-gold); }
+
+/* ============================================================
+   CONTENT GRIDS: MTF, CATALYSTS, SECTORS, VIEWS, HORIZON, ACTION
+   ============================================================ */
+.tf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.tf-card {
+  padding: 15px 16px;
+  border-radius: 13px;
+  background: rgba(7, 15, 29, 0.52);
+  border: 1px solid var(--kz-border);
+  border-top: 2.5px solid var(--kz-cyan);
+}
+[data-theme="light"] .tf-card { background: #F8FAFC; }
+.tf-card.w1 { border-top-color: var(--kz-purple); }
+.tf-card.d3 { border-top-color: var(--kz-blue); }
+.tf-card.d1 { border-top-color: var(--kz-green); }
+.tf-card.m15 { border-top-color: var(--kz-gold); }
+.tf-head {
+  font-family: var(--kz-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.tf-body { font-size: 13px; line-height: 1.65; color: var(--kz-text-soft); }
+
+.catalyst-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+.catalyst-card {
+  padding: 14px 16px;
+  border-radius: 13px;
+  background: rgba(7, 15, 29, 0.52);
+  border: 1px solid var(--kz-border);
+  border-left: 3px solid var(--kz-gold);
+}
+[data-theme="light"] .catalyst-card { background: #F8FAFC; }
+.catalyst-card.positive { border-left-color: var(--kz-green); }
+.catalyst-card.negative { border-left-color: var(--kz-rose); }
+.catalyst-card.neutral { border-left-color: var(--kz-gold); }
+.cat-title { font-size: 13px; font-weight: 700; color: var(--kz-text); margin: 6px 0 5px; }
+.cat-detail { font-size: 12.5px; color: var(--kz-text-soft); line-height: 1.58; }
+
+.sector-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.sector-box {
+  padding: 13px 14px;
+  border-radius: 12px;
+  background: rgba(7, 15, 29, 0.52);
+  border: 1px solid var(--kz-border);
+}
+[data-theme="light"] .sector-box { background: #F8FAFC; }
+.sector-title {
+  font-family: var(--kz-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 9px;
+}
+.sector-tag {
+  display: block;
+  font-size: 12px;
+  color: var(--kz-text-soft);
+  background: rgba(148, 179, 224, 0.09);
+  border: 1px solid var(--kz-border);
+  padding: 6px 9px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  line-height: 1.45;
+}
+
+.dual-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.horizon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.info-box {
+  padding: 14px 16px;
+  border-radius: 13px;
+  background: rgba(7, 15, 29, 0.52);
+  border: 1px solid var(--kz-border);
+}
+[data-theme="light"] .info-box { background: #F8FAFC; }
+.info-title {
+  font-family: var(--kz-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+.info-text { font-size: 13px; color: var(--kz-text-soft); line-height: 1.65; }
+
+/* Action Plan 8-Card Grid */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.action-box {
+  padding: 13px 15px;
+  border-radius: 12px;
+  background: rgba(7, 15, 29, 0.52);
+  border: 1px solid var(--kz-border);
+  border-left: 3px solid var(--kz-green);
+}
+[data-theme="light"] .action-box { background: #F8FAFC; }
+.action-box.gold { border-left-color: var(--kz-gold); }
+.action-box.rose { border-left-color: var(--kz-rose); }
+.action-box.purple { border-left-color: var(--kz-purple); }
+.action-box.cyan { border-left-color: var(--kz-cyan); }
+.ab-label {
+  font-family: var(--kz-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--kz-muted);
+  margin-bottom: 5px;
+}
+.ab-text { font-size: 13px; color: var(--kz-text); line-height: 1.58; }
+
+/* Interactive Persistent Checklist */
+.checklist { display: flex; flex-direction: column; gap: 8px; }
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 11px 14px;
+  border-radius: 11px;
+  background: rgba(7, 15, 29, 0.52);
+  border: 1px solid var(--kz-border);
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+[data-theme="light"] .check-item { background: #F8FAFC; }
+.check-item:hover { border-color: rgba(56, 213, 231, 0.40); }
+.check-box {
+  width: 20px; height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--kz-muted);
+  display: grid; place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: transparent;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: all 0.16s ease;
+}
+.check-item.checked {
+  border-color: rgba(52, 211, 153, 0.36);
+  background: rgba(52, 211, 153, 0.08);
+}
+.check-item.checked .check-box {
+  background: var(--kz-green);
+  border-color: var(--kz-green);
+  color: #04111F;
+}
+.check-item.checked .check-text {
+  text-decoration: line-through;
+  color: var(--kz-muted);
+}
+.check-text { font-size: 13px; color: var(--kz-text-soft); line-height: 1.55; }
+
+/* Ecosystem Banner */
+.eco-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(56, 213, 231, 0.12), rgba(243, 190, 98, 0.10));
+  border: 1px solid rgba(56, 213, 231, 0.28);
+}
+.disclaimer {
+  font-size: 11.5px;
+  color: var(--kz-muted);
+  font-style: italic;
+  text-align: center;
+  padding: 6px 12px;
+}
+
+/* Mobile FAB + Bottom Sheet */
+.fab {
+  display: none;
+  position: fixed;
+  right: 18px;
+  bottom: 20px;
+  z-index: 150;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(56,213,231,0.45);
+  background: linear-gradient(135deg, #0E223F, #102B4E);
+  color: #FFFFFF;
+  font-family: var(--kz-font);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  align-items: center;
+  gap: 8px;
+}
+.fab-badge {
+  background: var(--kz-cyan);
+  color: #04111F;
+  font-family: var(--kz-mono);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 8, 18, 0.72);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+.sheet-backdrop.open { opacity: 1; pointer-events: auto; }
+.bottom-sheet {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  max-height: 82vh;
+  z-index: 210;
+  background: var(--kz-bg-2);
+  border-top: 1px solid var(--kz-border-strong);
+  border-radius: 20px 20px 0 0;
+  transform: translateY(100%);
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+  display: flex;
+  flex-direction: column;
+}
+.bottom-sheet.open { transform: translateY(0); }
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--kz-border);
+}
+.sheet-title { font-size: 14px; font-weight: 800; }
+.sheet-body { overflow-y: auto; padding: 12px 16px 26px; display: flex; flex-direction: column; gap: 10px; }
+
+/* Toast & Sparkles */
+.toast-wrap {
+  position: fixed;
+  right: 20px;
+  bottom: 22px;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  padding: 11px 16px;
+  border-radius: 12px;
+  background: var(--kz-surface-solid);
+  border: 1px solid var(--kz-cyan);
+  color: var(--kz-text);
+  font-size: 12.5px;
+  font-weight: 600;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+.kz-sparkle {
+  position: fixed;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease;
+}
+
+.empty {
+  text-align: center;
+  padding: 64px 20px;
+  color: var(--kz-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.spinner {
+  width: 30px; height: 30px;
+  border: 3px solid var(--kz-border);
+  border-top-color: var(--kz-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1160px) {
+  .eco-dock { display: none; }
+  .eco-mobile-strip { display: flex; }
+  .pillars-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sector-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1040px) {
+  .shell { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .fab { display: inline-flex; }
+  .main { padding: 16px 14px 86px; }
+  .scenarios-stage { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .header { padding: 0 12px; }
+  .brand-badge, .last-sync { display: none; }
+  .hero { padding: 18px 16px; }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-score-card { flex-direction: row; justify-content: space-around; padding: 14px; }
+  .pillars-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tf-grid, .dual-grid, .horizon-grid, .action-grid, .sc-detail-grid, .sector-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 </style>
 </head>
 <body>
+<div class="kz-scroll-beam" id="kzScrollBeam"></div>
 
-<header>
-  <div class="container">
-    <div class="header-inner">
-      <div class="logo">
-        <div class="logo-icon">📈</div>
-        <div>
-          <div class="logo-text">Kenvin<span>Zone</span></div>
-          <div class="logo-sub">Phân tích chiến lược VNINDEX · HoSE</div>
-        </div>
-      </div>
-      <div class="header-right">
-        <div class="live-badge"><div class="live-dot"></div>Tự động</div>
-        <div class="last-update" id="lastUpdate">--</div>
-      </div>
-    </div>
+<!-- HEADER -->
+<header class="header">
+  <a href="https://vnindex.kenvinzone.com/" class="brand">
+    <div class="brand-mark">📈</div>
+    <div class="brand-name">KENVIN<span>ZONE</span></div>
+    <span class="brand-badge" data-i18n="badge">VNINDEX · HOSE</span>
+  </a>
+
+  <nav class="eco-dock" aria-label="KenvinZone Ecosystem">
+    <a class="eco-pill" href="https://kenvinzone.com/" target="_blank" rel="noopener noreferrer" data-i18n="ecoHome">🏠 Trang chủ</a>
+    <a class="eco-pill" href="https://aurora.kenvinzone.com/" target="_blank" rel="noopener noreferrer">⚡ Aurora V12.2</a>
+    <a class="eco-pill" href="https://gold-nasdaq.kenvinzone.com/" target="_blank" rel="noopener noreferrer" data-i18n="eco4h">📊 Chiến lược 4H</a>
+    <a class="eco-pill" href="https://bias.kenvinzone.com/" target="_blank" rel="noopener noreferrer">🧭 Daily Bias</a>
+    <a class="eco-pill active" href="https://vnindex.kenvinzone.com/">🇻🇳 VNINDEX</a>
+    <a class="eco-pill gold" href="https://prop.kenvinzone.com/" target="_blank" rel="noopener noreferrer">🏆 Prop Hub</a>
+  </nav>
+
+  <div class="header-right">
+    <span class="live-pill"><span class="live-dot"></span><span data-i18n="autoBadge">AUTO · HOSE</span></span>
+    <span class="last-sync" id="lastSync">--</span>
+    <button type="button" class="icon-btn" id="refreshBtn" title="Làm mới dữ liệu" aria-label="Refresh">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
+    </button>
+    <button type="button" class="icon-btn" id="langToggle" title="Switch language">EN</button>
+    <button type="button" class="icon-btn" id="themeToggle" title="Toggle Dark/Light">◐</button>
   </div>
 </header>
 
-<div class="container">
-  <div class="stats-bar" id="statsBar" style="display:none">
-    <div class="stat-item"><div class="stat-val sv-w" id="statTotal">0</div><div class="stat-label">Báo cáo</div></div>
-    <div class="stat-item"><div class="stat-val sv-g" id="statBuy">0</div><div class="stat-label">Buy</div></div>
-    <div class="stat-item"><div class="stat-val sv-y" id="statHold">0</div><div class="stat-label">Hold / Watchlist</div></div>
-    <div class="stat-item"><div class="stat-val sv-r" id="statAvoid">0</div><div class="stat-label">Reduce / Avoid</div></div>
-    <div class="stat-item"><div class="stat-val sv-w" id="statAvgScore">--</div><div class="stat-label">Điểm TB</div></div>
-  </div>
+<!-- MOBILE ECOSYSTEM STRIP -->
+<nav class="eco-mobile-strip" aria-label="KenvinZone Ecosystem Mobile">
+  <a class="eco-pill" href="https://kenvinzone.com/" target="_blank" rel="noopener noreferrer" data-i18n="ecoHome">🏠 Trang chủ</a>
+  <a class="eco-pill" href="https://aurora.kenvinzone.com/" target="_blank" rel="noopener noreferrer">⚡ Aurora V12.2</a>
+  <a class="eco-pill" href="https://gold-nasdaq.kenvinzone.com/" target="_blank" rel="noopener noreferrer" data-i18n="eco4h">📊 Chiến lược 4H</a>
+  <a class="eco-pill" href="https://bias.kenvinzone.com/" target="_blank" rel="noopener noreferrer">🧭 Daily Bias</a>
+  <a class="eco-pill active" href="https://vnindex.kenvinzone.com/">🇻🇳 VNINDEX</a>
+  <a class="eco-pill gold" href="https://prop.kenvinzone.com/" target="_blank" rel="noopener noreferrer">🏆 Prop Hub</a>
+</nav>
 
-  <div class="filter-bar">
-    <span class="filter-label">Lọc:</span>
-    <button class="filter-btn active" onclick="setFilter('all',this)">Tất cả</button>
-    <button class="filter-btn" onclick="setFilter('today',this)">Hôm nay</button>
-    <button class="filter-btn" onclick="setFilter('week',this)">Tuần này</button>
-    <button class="filter-btn" onclick="setFilter('month',this)">Tháng này</button>
-    <select class="filter-select" id="monthSelect" onchange="setMonthFilter(this.value)">
-      <option value="">-- Chọn tháng --</option>
-    </select>
-    <select class="filter-select" id="actionFilter" onchange="setActionFilter(this.value)">
-      <option value="">-- Action Label --</option>
-      <option>Buy</option><option>Hold</option><option>Reduce</option>
-      <option>Take Profit Partial</option><option>Watchlist</option><option>Avoid New Entry</option>
-    </select>
-  </div>
+<!-- APP SHELL -->
+<div class="shell">
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-top">
+      <input type="text" id="searchInput" class="search-input" placeholder="Tìm điểm số, kịch bản, catalyst... (phím /)" />
+      <div class="sb-row">
+        <select id="monthSelect" class="sb-select"></select>
+        <button type="button" id="advFilterToggle" class="adv-toggle" data-i18n="moreFilters">⚙️ Lọc thêm</button>
+      </div>
 
-  <div id="content">
-    <div class="loading"><div class="spinner"></div>Đang tải dữ liệu...</div>
-  </div>
+      <div id="advFiltersBox" class="adv-box collapsed">
+        <div class="chip-row" id="timeChips">
+          <button type="button" class="chip active" data-time="all" data-i18n="all">Tất cả</button>
+          <button type="button" class="chip" data-time="today" data-i18n="today">Hôm nay</button>
+          <button type="button" class="chip" data-time="week" data-i18n="week">7 ngày</button>
+          <button type="button" class="chip" data-time="month" data-i18n="month">Tháng</button>
+        </div>
+        <select id="actionSelect" class="sb-select">
+          <option value="all" data-i18n="allActions">Tất cả trạng thái hành động</option>
+          <option value="Buy">Buy</option>
+          <option value="Hold">Hold</option>
+          <option value="Watchlist">Watchlist</option>
+          <option value="Take Profit Partial">Take Profit Partial</option>
+          <option value="Reduce">Reduce</option>
+          <option value="Avoid New Entry">Avoid New Entry</option>
+        </select>
+      </div>
+
+      <div class="sb-stats">
+        <div class="sb-stat"><div class="sb-stat-v" id="statTotal">0</div><div class="sb-stat-k" data-i18n="stTotal">Tổng</div></div>
+        <div class="sb-stat"><div class="sb-stat-v" style="color:var(--kz-green)" id="statBuy">0</div><div class="sb-stat-k">Buy</div></div>
+        <div class="sb-stat"><div class="sb-stat-v" style="color:var(--kz-rose)" id="statAvoid">0</div><div class="sb-stat-k" data-i18n="stCaution">Thận trọng</div></div>
+        <div class="sb-stat"><div class="sb-stat-v" style="color:var(--kz-cyan)" id="statAvg">--</div><div class="sb-stat-k" data-i18n="stAvg">Điểm TB</div></div>
+      </div>
+    </div>
+
+    <div class="report-list" id="reportList"></div>
+  </aside>
+
+  <!-- MAIN COMMAND STAGE -->
+  <main class="main" id="mainContent">
+    <div class="empty"><div class="spinner"></div><div data-i18n="loading">Đang tải dữ liệu VNINDEX...</div></div>
+  </main>
 </div>
 
+<!-- MOBILE FAB & BOTTOM SHEET -->
+<button type="button" class="fab" id="fabBtn">
+  <span>📋</span><span data-i18n="historyBtn">Lịch sử phiên</span><span class="fab-badge" id="fabBadge">0</span>
+</button>
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<div class="bottom-sheet" id="bottomSheet">
+  <div class="sheet-head">
+    <div class="sheet-title" data-i18n="sheetTitle">Lịch sử Chiến lược VNINDEX</div>
+    <button type="button" class="icon-btn" id="sheetClose">✕</button>
+  </div>
+  <div class="sheet-body" id="sheetBody"></div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
 <script>
-let allReports=[],currentFilter='all',currentMonth='',currentAction='';
+// ============================================================
+// BILINGUAL ENGINE (SYNCED VIA .kenvinzone.com kz-lang COOKIE)
+// ============================================================
+function detectLang() {
+  try {
+    const qp = new URLSearchParams(location.search).get('lang');
+    if (qp === 'en' || qp === 'vi') return qp;
+    const cm = document.cookie.match(/(?:^|;\s*)kz-lang=(en|vi)/);
+    if (cm && cm[1]) return cm[1];
+    const ls = localStorage.getItem('kz-lang');
+    if (ls === 'en' || ls === 'vi') return ls;
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    return /Ho_Chi_Minh|Saigon|Asia\/Bangkok/i.test(tz) ? 'vi' : 'en';
+  } catch(_) { return 'vi'; }
+}
+let currentLang = detectLang();
 
-async function loadData(){
-  let reports=[];
-  try{const r=await fetch('reports.json?t='+Date.now());const d=await r.json();if(d.reports)reports=[...d.reports];}catch(e){}
-  try{const r=await fetch('history.json?t='+Date.now());const d=await r.json();if(d.reports)d.reports.forEach(r=>{if(!reports.find(x=>x.id===r.id))reports.push(r);});}catch(e){}
-  try{const ls=JSON.parse(localStorage.getItem('vnindex_reports')||'[]');ls.forEach(r=>{if(!reports.find(x=>x.id===r.id))reports.push(r);});}catch(e){}
-  reports.sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
-  allReports=reports;
-  buildMonthOptions();render();updateStats();updateLastUpdate();
+const I18N = {
+  vi: {
+    title: 'KenvinZone VNINDEX · Bảng Chiến Lược Chứng Khoán Việt Nam',
+    badge: 'VNINDEX · HOSE',
+    ecoHome: '🏠 Trang chủ',
+    eco4h: '📊 Chiến lược 4H',
+    autoBadge: 'AUTO · HOSE',
+    moreFilters: '⚙️ Lọc thêm',
+    lessFilters: '✕ Thu gọn',
+    all: 'Tất cả',
+    today: 'Hôm nay',
+    week: '7 ngày',
+    month: 'Tháng',
+    allActions: 'Tất cả trạng thái hành động',
+    allMonths: '📅 Tất cả các tháng',
+    monthFmt: (m, y) => `Tháng ${m} / ${y}`,
+    searchPh: 'Tìm điểm số, kịch bản, catalyst... (phím /)',
+    stTotal: 'Tổng',
+    stCaution: 'Phòng thủ',
+    stAvg: 'Điểm TB',
+    loading: 'Đang tải dữ liệu VNINDEX...',
+    historyBtn: 'Lịch sử phiên',
+    sheetTitle: 'Lịch sử Chiến lược VNINDEX',
+    emptyList: 'Không có báo cáo phù hợp',
+    clearFilter: 'Xoá bộ lọc',
+    emptyMain: 'Chọn một phiên giao dịch để xem Bảng Chiến Lược VNINDEX',
+    latestMorning: '🌅 Phiên Sáng gần nhất',
+    latestAfternoon: '🌇 Phiên Chiều gần nhất',
+    sessionLbl: (s) => `Phiên ${s}`,
+    copyBrief: '📋 Copy Tóm Tắt Nhanh',
+    auroraCta: '⚡ Tín hiệu Aurora V12.2 →',
+    actionProb: (p) => `Xác suất hành động: ${p}%`,
+    secPillars: 'Chấm Điểm Hệ Thống 5 Trụ Cột (Thang 100)',
+    pTech: 'Kỹ thuật', pTime: 'Timing', pFlow: 'Dòng tiền', pSec: 'Sector', pRisk: 'Rủi ro',
+    secScenarios: 'Ma Trận Kịch Bản Trọng Tâm (Ưu Tiên Theo Xác Suất)',
+    pillUltra: (p) => `🔥 KỊCH BẢN CHÍNH · XÁC SUẤT CAO ${p}%`,
+    pillMain: (id, p) => `★ KỊCH BẢN CHÍNH (${id}) · ${p}%`,
+    probLbl: 'Xác suất',
+    triggerLbl: 'Điều kiện kích hoạt',
+    targetLbl: 'Mục tiêu / Hệ quả',
+    secAction: 'Kế Hoạch Hành Động Trong Phiên',
+    apNew: '🎯 Vị thế mới', apHold: '📦 Đang nắm giữ', apMargin: '⚠️ Quản trị Margin',
+    apPri: '✅ Nhóm ngành ưu tiên', apAvoid: '🚫 Tránh FOMO', apWait: '⏳ Tín hiệu đang chờ',
+    apBull: '🔼 Thesis mạnh lên khi', apBear: '🔽 Thesis vô hiệu khi',
+    secChecklist: 'Checklist Hành Động Nhanh (Click để đánh dấu)',
+    secMtf: 'Phân Tích Đa Khung Thời Gian (W1 · 3D · D1 · M15)',
+    tfW1: '📅 Weekly (W1)', tfD3: '📐 3 Ngày (3D)', tfD1: '📈 Daily (D1)', tfM15: '⚡ Intraday (M15)',
+    secContext: 'Bối Cảnh Thị Trường & Vĩ Mô · Catalyst',
+    secFlow: 'Dòng Tiền, Thanh Khoản & Luân Chuyển Nhóm Ngành',
+    srLead: '🟢 Dẫn dắt', srEmerge: '🔵 Đang hút tiền', srHot: '🟡 Tăng nóng · Cẩn trọng', srAvoid: '🔴 Nên tránh FOMO',
+    secViews: 'Góc Nhìn Tổ Chức vs Trader Cá Nhân',
+    vInst: '🏦 Quỹ / Khối ngoại / Tổ chức', vRetail: '👤 Nhà đầu tư cá nhân',
+    secHorizon: 'Chiến Lược Theo 3 Chân Trời Thời Gian',
+    hToday: '📍 Trong phiên / Hôm nay', hWeek: '📆 Trong tuần', hMid: '🎯 Trung hạn',
+    ecoSub: 'HỆ SINH THÁI KENVINZONE',
+    ecoTitle: 'Theo dõi đồng thời VNINDEX + Bảng Chiến Lược 4H XAUUSD/NASDAQ & Daily Macro Bias',
+    ecoBtn1: '📊 Mở Chiến Lược 4H →',
+    ecoBtn2: '🧭 Mở Daily Bias →',
+    copiedBrief: '✓ Đã sao chép tóm tắt VNINDEX!',
+    refreshed: '✓ Đã đồng bộ dữ liệu VNINDEX mới nhất!',
+    impPos: 'Tích cực', impNeg: 'Tiêu cực', impNeu: 'Trung lập',
+    justNow: 'vừa xong',
+    minsAgo: (m) => `${m} phút trước`,
+    hrsAgo: (h) => `${h} giờ trước`,
+    daysAgo: (d) => `${d} ngày trước`
+  },
+  en: {
+    title: 'KenvinZone VNINDEX · Vietnam Equity Strategy Desk',
+    badge: 'VNINDEX · HOSE',
+    ecoHome: '🏠 Home',
+    eco4h: '📊 4H Strategy',
+    autoBadge: 'AUTO · HOSE',
+    moreFilters: '⚙️ Filters',
+    lessFilters: '✕ Hide',
+    all: 'All',
+    today: 'Today',
+    week: '7 Days',
+    month: 'Month',
+    allActions: 'All Action Labels',
+    allMonths: '📅 All Months',
+    monthFmt: (m, y) => `Month ${m} / ${y}`,
+    searchPh: 'Search score, scenarios, catalysts... (press /)',
+    stTotal: 'Total',
+    stCaution: 'Defensive',
+    stAvg: 'Avg Score',
+    loading: 'Loading VNINDEX updates...',
+    historyBtn: 'Session History',
+    sheetTitle: 'VNINDEX Strategy History',
+    emptyList: 'No matching sessions',
+    clearFilter: 'Reset filters',
+    emptyMain: 'Select a session from the list to view the VNINDEX Strategy Desk',
+    latestMorning: '🌅 Latest Morning',
+    latestAfternoon: '🌇 Latest Close',
+    sessionLbl: (s) => `Session ${s}`,
+    copyBrief: '📋 Copy Quick Brief',
+    auroraCta: '⚡ Aurora V12.2 System →',
+    actionProb: (p) => `Action Probability: ${p}%`,
+    secPillars: '5-Pillar Composite Score Breakdown (/100)',
+    pTech: 'Technical', pTime: 'Timing', pFlow: 'Money Flow', pSec: 'Sector', pRisk: 'Event Risk',
+    secScenarios: 'Core Scenario Matrix (Ranked by Probability)',
+    pillUltra: (p) => `🔥 HIGH-CONVICTION PRIMARY · ${p}%`,
+    pillMain: (id, p) => `★ PRIMARY SCENARIO (${id}) · ${p}%`,
+    probLbl: 'Prob.',
+    triggerLbl: 'Activation Trigger',
+    targetLbl: 'Target / Outcome',
+    secAction: 'Tactical Session Action Plan',
+    apNew: '🎯 New Position', apHold: '📦 Existing Holdings', apMargin: '⚠️ Margin Risk',
+    apPri: '✅ Priority Sectors', apAvoid: '🚫 Avoid FOMO', apWait: '⏳ Waiting For',
+    apBull: '🔼 Bullish Confirmation', apBear: '🔽 Thesis Invalidation',
+    secChecklist: 'Session Action Checklist (Click to check off)',
+    secMtf: 'Multi-Timeframe Analysis (W1 · 3D · D1 · M15)',
+    tfW1: '📅 Weekly (W1)', tfD3: '📐 3-Day (3D)', tfD1: '📈 Daily (D1)', tfM15: '⚡ Intraday (M15)',
+    secContext: 'Market Context & Macro Catalysts',
+    secFlow: 'Money Flow, Liquidity & Sector Rotation',
+    srLead: '🟢 Leaders', srEmerge: '🔵 Emerging Flow', srHot: '🟡 Overheated · Caution', srAvoid: '🔴 Avoid FOMO',
+    secViews: 'Institutional vs Retail Perspective',
+    vInst: '🏦 Institutional / Foreign Flow', vRetail: '👤 Retail Trader Playbook',
+    secHorizon: '3-Horizon Strategy Map',
+    hToday: '📍 Today / Intraday', hWeek: '📆 This Week', hMid: '🎯 Medium Term',
+    ecoSub: 'KENVINZONE ECOSYSTEM',
+    ecoTitle: 'Track VNINDEX alongside 4H XAUUSD/NASDAQ Strategy Desk & Daily Macro Bias',
+    ecoBtn1: '📊 Open 4H Strategy →',
+    ecoBtn2: '🧭 Open Daily Bias →',
+    copiedBrief: '✓ VNINDEX summary copied!',
+    refreshed: '✓ Synced latest VNINDEX data!',
+    impPos: 'Positive', impNeg: 'Negative', impNeu: 'Neutral',
+    justNow: 'just now',
+    minsAgo: (m) => `${m}m ago`,
+    hrsAgo: (h) => `${h}h ago`,
+    daysAgo: (d) => `${d}d ago`
+  }
+};
+
+function L(k) {
+  const d = I18N[currentLang] || I18N.vi;
+  return d[k] !== undefined ? d[k] : I18N.vi[k];
 }
 
-function buildMonthOptions(){
-  const months=new Set();
-  allReports.forEach(r=>{if(r.datetime){const d=new Date(r.datetime);months.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);}});
-  const sel=document.getElementById('monthSelect');
-  sel.innerHTML='<option value="">-- Chọn tháng --</option>';
-  [...months].sort().reverse().forEach(m=>{const[y,mo]=m.split('-');const o=document.createElement('option');o.value=m;o.textContent=`Tháng ${mo}/${y}`;sel.appendChild(o);});
+function applyStaticLang() {
+  document.documentElement.lang = currentLang;
+  document.title = L('title');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = L(el.getAttribute('data-i18n'));
+    if (typeof v === 'string') el.textContent = v;
+  });
+  const advT = document.getElementById('advFilterToggle');
+  const advB = document.getElementById('advFiltersBox');
+  if (advT && advB) advT.textContent = advB.classList.contains('collapsed') ? L('moreFilters') : L('lessFilters');
+  const si = document.getElementById('searchInput');
+  if (si) si.placeholder = L('searchPh');
+  const lb = document.getElementById('langToggle');
+  if (lb) {
+    lb.textContent = currentLang === 'en' ? 'VI' : 'EN';
+    lb.title = currentLang === 'en' ? 'Chuyển sang Tiếng Việt' : 'Switch to English';
+  }
 }
-function updateLastUpdate(){if(!allReports.length)return;document.getElementById('lastUpdate').textContent='Cập nhật: '+new Date(allReports[0].datetime).toLocaleString('vi-VN');}
-function updateStats(){
-  const f=getFiltered();
-  document.getElementById('statsBar').style.display=f.length?'flex':'none';
-  document.getElementById('statTotal').textContent=f.length;
-  document.getElementById('statBuy').textContent=f.filter(r=>getAL(r)==='Buy').length;
-  document.getElementById('statHold').textContent=f.filter(r=>['Hold','Watchlist'].includes(getAL(r))).length;
-  document.getElementById('statAvoid').textContent=f.filter(r=>['Reduce','Take Profit Partial','Avoid New Entry'].includes(getAL(r))).length;
-  const sc=f.map(r=>getScore(r)).filter(s=>s>0);
-  document.getElementById('statAvgScore').textContent=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):'--';
+
+function setLang(next) {
+  currentLang = next === 'en' ? 'en' : 'vi';
+  try { localStorage.setItem('kz-lang', currentLang); } catch(_) {}
+  try {
+    const dom = /\.?kenvinzone\.com$/i.test(location.hostname) ? '; domain=.kenvinzone.com' : '';
+    document.cookie = `kz-lang=${currentLang}; path=/${dom}; max-age=31536000; SameSite=Lax`;
+  } catch(_) {}
+  applyStaticLang();
+  buildMonthOptions();
+  renderList();
+  renderMain();
+  updateLastSync();
 }
-function getFiltered(){
-  const now=new Date();
-  return allReports.filter(r=>{
-    const d=r.datetime?new Date(r.datetime):null;
-    if(currentFilter==='today'&&d&&d.toDateString()!==now.toDateString())return false;
-    if(currentFilter==='week'&&d){const w=new Date(now);w.setDate(now.getDate()-7);if(d<w)return false;}
-    if(currentFilter==='month'&&d&&(d.getMonth()!==now.getMonth()||d.getFullYear()!==now.getFullYear()))return false;
-    if(currentMonth&&d){const[y,mo]=currentMonth.split('-');if(d.getFullYear()!==parseInt(y)||d.getMonth()+1!==parseInt(mo))return false;}
-    if(currentAction&&getAL(r)!==currentAction)return false;
+
+// ============================================================
+// THEME, SCROLL BEAM & SPARKLES
+// ============================================================
+const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+(function initChrome() {
+  const tBtn = document.getElementById('themeToggle');
+  if (tBtn) {
+    tBtn.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('kz-theme', next); } catch(_) {}
+      try {
+        const dom = /\.?kenvinzone\.com$/i.test(location.hostname) ? '; domain=.kenvinzone.com' : '';
+        document.cookie = `kz-theme=${next}; path=/${dom}; max-age=31536000; SameSite=Lax`;
+      } catch(_) {}
+    });
+  }
+  const beam = document.getElementById('kzScrollBeam');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking && beam) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        beam.style.transform = `scaleX(${Math.min(1, Math.max(0, window.scrollY / max)).toFixed(4)})`;
+      });
+    }
+  }, { passive: true });
+
+  if (!prefersReduced) {
+    document.addEventListener('pointermove', (e) => {
+      const card = e.target && e.target.closest ? e.target.closest('.panel') : null;
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left).toFixed(1) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top).toFixed(1) + 'px');
+    }, { passive: true });
+  }
+})();
+
+function spawnSparkles(x, y) {
+  if (prefersReduced) return;
+  const colors = ['#38D5E7', '#34D399', '#F3BE62', '#FFFFFF'];
+  for (let i = 0; i < 10; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'kz-sparkle';
+    dot.style.left = (x || window.innerWidth / 2) + 'px';
+    dot.style.top = (y || window.innerHeight / 2) + 'px';
+    dot.style.background = colors[i % colors.length];
+    document.body.appendChild(dot);
+    const a = (Math.PI * 2 * i) / 10 + (Math.random() - 0.5) * 0.4;
+    const d = 24 + Math.random() * 34;
+    requestAnimationFrame(() => {
+      dot.style.transform = `translate3d(${(Math.cos(a)*d).toFixed(1)}px, ${(Math.sin(a)*d - 8).toFixed(1)}px, 0) scale(0)`;
+      dot.style.opacity = '0';
+    });
+    setTimeout(() => dot.remove(), 580);
+  }
+}
+
+let heroCanvasRaf = null;
+function startHeroCanvas() {
+  if (heroCanvasRaf) cancelAnimationFrame(heroCanvasRaf);
+  const canvas = document.getElementById('kzHeroCanvas');
+  if (!canvas || prefersReduced) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  let phase = 0;
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (w <= 0 || h <= 0) return;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function drawWave(w, h, yFrac, amp, freq, spd, color) {
+    ctx.beginPath();
+    for (let i = 0; i <= 40; i++) {
+      const u = i / 40;
+      const x = u * w;
+      const y = yFrac * h + Math.sin(u * freq + phase * spd) * amp + Math.cos(u * freq * 0.5 - phase * 0.6) * (amp * 0.4);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = color; ctx.lineWidth = 1.25; ctx.stroke();
+  }
+  function loop() {
+    if (!document.body.contains(canvas)) return;
+    if (!document.hidden) {
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      if (w > 0 && h > 0) {
+        ctx.clearRect(0, 0, w, h);
+        phase += 0.012;
+        drawWave(w, h, 0.34, 16, 4.8, 1.0, 'rgba(52, 211, 153, 0.16)');
+        drawWave(w, h, 0.62, 20, 4.0, -0.8, 'rgba(56, 213, 231, 0.14)');
+        drawWave(w, h, 0.80, 12, 5.6, 0.6, 'rgba(243, 190, 98, 0.10)');
+      }
+    }
+    heroCanvasRaf = requestAnimationFrame(loop);
+  }
+  resize();
+  loop();
+}
+
+// ============================================================
+// DATA UTILS (100% COMPATIBLE WITH MAKE.COM VNINDEX JSON)
+// ============================================================
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmtPrice(v) {
+  const n = Number(v);
+  if (Number.isFinite(n) && n > 0) return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return v ? String(v) : '—';
+}
+function fmtRelative(ts) {
+  try {
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return '--';
+    const diff = (Date.now() - d.getTime()) / 1000;
+    if (diff < 60) return L('justNow');
+    if (diff < 3600) return L('minsAgo')(Math.floor(diff / 60));
+    if (diff < 86400) return L('hrsAgo')(Math.floor(diff / 3600));
+    if (diff < 604800) return L('daysAgo')(Math.floor(diff / 86400));
+    return d.toLocaleDateString('vi-VN');
+  } catch { return '--'; }
+}
+function getRaw(r) {
+  if (!r) return {};
+  if (typeof r.raw === 'object' && r.raw !== null) return r.raw;
+  try { return JSON.parse(r.raw || '{}'); } catch { return {}; }
+}
+function getAL(r) { return getRaw(r)?.scoring?.action_label || ''; }
+function getScore(r) { return Number(getRaw(r)?.scoring?.composite_score || 0); }
+function getALClass(al) {
+  const l = (al || '').toLowerCase();
+  if (l.includes('buy') || l.includes('accumulate')) return 'al-buy';
+  if (l.includes('hold')) return 'al-hold';
+  if (l.includes('reduce')) return 'al-reduce';
+  if (l.includes('profit') || l.includes('partial')) return 'al-profit';
+  if (l.includes('avoid')) return 'al-avoid';
+  return 'al-watch';
+}
+function getBiasType(bias) {
+  const b = (bias || '').toLowerCase();
+  if (b.includes('bull')) return 'bull';
+  if (b.includes('bear')) return 'bear';
+  return 'neutral';
+}
+function scoreColor(score) {
+  if (score >= 68) return '#34D399';
+  if (score >= 48) return '#F3BE62';
+  return '#FB7185';
+}
+function getMonthKey(dt) {
+  const d = new Date(dt);
+  if (isNaN(d.getTime())) return '';
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+// ============================================================
+// STATE & SELF-HEALING FETCH
+// ============================================================
+let allReports = [];
+let filteredReports = [];
+let selectedId = null;
+let filters = { time: 'all', month: 'all', action: 'all', search: '' };
+const CHECKLIST_KEY = 'kz_vnindex_checklist_v1';
+let checklistState = {};
+try { checklistState = JSON.parse(localStorage.getItem(CHECKLIST_KEY) || '{}'); } catch {}
+
+async function tryFetchReports(url) {
+  try {
+    const res = await fetch(url + '?t=' + Date.now());
+    if (!res.ok) return [];
+    let txt = await res.text();
+    txt = txt.replace(/"raw"\s*:\s*,\s*\{/g, '"raw":{');
+    const data = JSON.parse(txt);
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.reports)) return data.reports;
+    return [];
+  } catch { return []; }
+}
+
+async function loadData(notify = false) {
+  const [fresh, hist] = await Promise.all([
+    tryFetchReports('reports.json'),
+    tryFetchReports('history.json')
+  ]);
+  let ls = [];
+  try { ls = JSON.parse(localStorage.getItem('vnindex_reports') || '[]'); } catch {}
+
+  const seen = new Set();
+  const merged = [...fresh, ...hist, ...ls].filter(r => {
+    const key = r && (r.id || r.datetime);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).sort((a, b) => new Date(b.datetime || 0) - new Date(a.datetime || 0));
+
+  allReports = merged;
+  buildMonthOptions();
+  applyFilters();
+  if (!selectedId && filteredReports.length) selectedId = filteredReports[0].id;
+  if (filteredReports.length && !filteredReports.some(r => r.id === selectedId)) selectedId = filteredReports[0].id;
+
+  updateLastSync();
+  updateStats();
+  renderList();
+  renderMain();
+  if (notify) showToast(L('refreshed'));
+}
+
+function updateLastSync() {
+  const el = document.getElementById('lastSync');
+  if (el && allReports.length) el.textContent = fmtRelative(allReports[0].datetime);
+}
+
+function buildMonthOptions() {
+  const sel = document.getElementById('monthSelect');
+  if (!sel) return;
+  const prev = filters.month;
+  const months = [...new Set(allReports.map(r => getMonthKey(r.datetime)).filter(Boolean))].sort().reverse();
+  sel.innerHTML = `<option value="all">${L('allMonths')}</option>` +
+    months.map(mk => {
+      const [y, m] = mk.split('-');
+      return `<option value="${mk}" ${mk === prev ? 'selected' : ''}>${L('monthFmt')(parseInt(m), y)}</option>`;
+    }).join('');
+}
+
+function applyFilters() {
+  const now = new Date();
+  const q = filters.search.toLowerCase();
+  filteredReports = allReports.filter(r => {
+    const d = r.datetime ? new Date(r.datetime) : null;
+    if (filters.time === 'today' && d && d.toDateString() !== now.toDateString()) return false;
+    if (filters.time === 'week' && d) { const w = new Date(now); w.setDate(w.getDate() - 7); if (d < w) return false; }
+    if (filters.time === 'month' && d && (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear())) return false;
+    if (filters.month !== 'all' && getMonthKey(r.datetime) !== filters.month) return false;
+    if (filters.action !== 'all' && getAL(r) !== filters.action) return false;
+    if (q) {
+      const raw = getRaw(r);
+      const hay = [r.id, r.date_display, r.price_current, getAL(r), raw.quick_view, raw.market_context].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
     return true;
   });
 }
-function setFilter(f,btn){currentFilter=f;currentMonth='';document.getElementById('monthSelect').value='';document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();updateStats();}
-function setMonthFilter(v){currentMonth=v;currentFilter='all';document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));document.querySelector('.filter-btn').classList.add('active');render();updateStats();}
-function setActionFilter(v){currentAction=v;render();updateStats();}
 
-function getRaw(r){try{return typeof r.raw==='object'?r.raw:JSON.parse(r.raw);}catch(e){return null;}}
-function getAL(r){return getRaw(r)?.scoring?.action_label||'';}
-function getScore(r){return getRaw(r)?.scoring?.composite_score||0;}
-
-function getALClass(al){
-  const l=(al||'').toLowerCase();
-  if(l.includes('buy')||l.includes('accumulate'))return 'al-buy';
-  if(l.includes('hold'))return 'al-hold';
-  if(l.includes('reduce'))return 'al-reduce';
-  if(l.includes('profit')||l.includes('partial'))return 'al-profit';
-  if(l.includes('watch'))return 'al-watch';
-  if(l.includes('avoid'))return 'al-avoid';
-  return 'al-watch';
+function updateStats() {
+  document.getElementById('statTotal').textContent = filteredReports.length;
+  document.getElementById('statBuy').textContent = filteredReports.filter(r => getAL(r) === 'Buy').length;
+  document.getElementById('statAvoid').textContent = filteredReports.filter(r => ['Reduce','Take Profit Partial','Avoid New Entry'].includes(getAL(r))).length;
+  const sc = filteredReports.map(getScore).filter(x => x > 0);
+  document.getElementById('statAvg').textContent = sc.length ? Math.round(sc.reduce((a,b)=>a+b,0) / sc.length) : '--';
+  const fb = document.getElementById('fabBadge');
+  if (fb) fb.textContent = filteredReports.length;
 }
 
-function buildRing(score){
-  const r=32,c=2*Math.PI*r,fill=(score/100)*c;
-  const color=score>=70?'#22c55e':score>=50?'#facc15':'#ef4444';
-  return `<svg width="76" height="76" viewBox="0 0 76 76"><circle class="bg" cx="38" cy="38" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="0"/><circle class="fill" cx="38" cy="38" r="${r}" stroke="${color}" stroke-dasharray="${c}" stroke-dashoffset="${c-fill}"/></svg>`;
-}
-function bar(v,max){const p=Math.min(100,Math.round((v/max)*100));return `<div class="sc-bar-bg"><div class="sc-bar-fill" style="width:${p}%"></div></div>`;}
-
-function scenarioBiasClass(bias){
-  if(!bias)return'sb-neutral';
-  const b=bias.toLowerCase();
-  if(b.includes('bull'))return'sb-bull';
-  if(b.includes('bear'))return'sb-bear';
-  return'sb-neutral';
-}
-function scenarioProbClass(bias){
-  if(!bias)return'sp-neutral';
-  const b=bias.toLowerCase();
-  if(b.includes('bull'))return'sp-bull';
-  if(b.includes('bear'))return'sp-bear';
-  return'sp-neutral';
+function resetFilters() {
+  filters = { time: 'all', month: 'all', action: 'all', search: '' };
+  document.getElementById('searchInput').value = '';
+  document.getElementById('monthSelect').value = 'all';
+  document.getElementById('actionSelect').value = 'all';
+  document.querySelectorAll('#timeChips .chip').forEach(c => c.classList.toggle('active', c.dataset.time === 'all'));
+  applyFiltersAndRender();
 }
 
-function buildCard(r,idx){
-  const raw=getRaw(r),score=getScore(r),al=getAL(r);
-  const sc=raw?.scoring||{},ap=raw?.action_plan||{};
-  const scenarios=raw?.scenarios||[];
-  const horizon=raw?.horizon||{};
-  const checklist=raw?.checklist||[];
-  const catalysts=raw?.macro_catalysts||[];
-  const sr=raw?.sector_rotation||{};
-  const price=r.price_current?parseFloat(r.price_current).toLocaleString('vi-VN',{maximumFractionDigits:2}):'';
+function applyFiltersAndRender() {
+  applyFilters();
+  selectedId = filteredReports.length ? filteredReports[0].id : null;
+  updateStats();
+  renderList();
+  renderMain();
+}
 
-  // Sector tags helper
-  const tags=(arr)=>(arr||[]).map(t=>`<span class="sector-tag">${t}</span>`).join('');
+// ============================================================
+// SIDEBAR & MOBILE SHEET LIST
+// ============================================================
+function buildListHtml() {
+  if (!filteredReports.length) {
+    return `<div class="empty"><div style="font-size:26px">📭</div><div>${L('emptyList')}</div><button type="button" class="kz-btn" onclick="resetFilters()">${L('clearFilter')}</button></div>`;
+  }
+  const groups = {};
+  filteredReports.forEach(r => { (groups[r.date_display || '—'] ||= []).push(r); });
+  return Object.entries(groups).map(([date, list]) => `
+    <div class="date-hdr"><span>📅 ${esc(date)}</span><span class="date-cnt">${list.length}</span></div>
+    ${list.map(r => {
+      const raw = getRaw(r);
+      const sc = getScore(r);
+      const al = getAL(r);
+      return `
+        <div class="report-item ${r.id === selectedId ? 'active' : ''}" data-id="${esc(r.id)}">
+          <div class="ri-top">
+            <span class="ri-price">${esc(fmtPrice(r.price_current))}</span>
+            <span class="ri-time">${esc(r.time_display || '')}</span>
+          </div>
+          <div class="ri-badges">
+            <span class="badge score-pill">Score ${sc}/100</span>
+            ${al ? `<span class="badge ${getALClass(al)}">${esc(al)}</span>` : ''}
+          </div>
+          <div class="ri-snippet">${esc(raw.quick_view || '—')}</div>
+        </div>`;
+    }).join('')}
+  `).join('');
+}
 
-  // Catalyst impact badge
-  const impactBadge=(imp)=>{
-    if(!imp)return'';
-    if(imp==='positive')return'<span class="catalyst-badge cb-pos">Tích cực</span>';
-    if(imp==='negative')return'<span class="catalyst-badge cb-neg">Tiêu cực</span>';
-    return'<span class="catalyst-badge cb-neu">Trung lập</span>';
-  };
+function renderList() {
+  const html = buildListHtml();
+  document.getElementById('reportList').innerHTML = html;
+  const sb = document.getElementById('sheetBody');
+  if (sb) {
+    sb.innerHTML = `<input type="text" id="searchInputMob" class="search-input" placeholder="${esc(L('searchPh'))}" value="${esc(filters.search)}" />` + html;
+    const sm = document.getElementById('searchInputMob');
+    if (sm) {
+      let t;
+      sm.oninput = (e) => {
+        clearTimeout(t);
+        t = setTimeout(() => {
+          filters.search = e.target.value.trim();
+          document.getElementById('searchInput').value = filters.search;
+          applyFiltersAndRender();
+        }, 180);
+      };
+    }
+  }
+  document.querySelectorAll('.report-item').forEach(el => {
+    el.onclick = () => {
+      selectedId = el.dataset.id;
+      renderList();
+      renderMain();
+      closeSheet();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+  });
+}
+
+// ============================================================
+// MAIN COMMAND STAGE RENDERER
+// ============================================================
+function buildScoreSparkline() {
+  const ptsArr = allReports.slice(0, 12).reverse().map(getScore).filter(x => x > 0);
+  if (ptsArr.length < 2) return '';
+  const w = 180, h = 32, pad = 3;
+  const stepX = (w - pad * 2) / (ptsArr.length - 1);
+  const pts = ptsArr.map((v, i) => `${(pad + i * stepX).toFixed(1)},${(h - pad - (v / 100) * (h - pad * 2)).toFixed(1)}`).join(' ');
+  const col = scoreColor(ptsArr[ptsArr.length - 1]);
+  return `
+    <svg class="hero-sparkline" viewBox="0 0 ${w} ${h}" aria-hidden="true">
+      <defs><linearGradient id="vSpG" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${col}" stop-opacity="0.30"/><stop offset="100%" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+      <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <polygon points="${pts} ${w - pad},${h} ${pad},${h}" fill="url(#vSpG)"/>
+    </svg>`;
+}
+
+function buildScenariosStage(scenarios) {
+  if (!scenarios || !scenarios.length) return '';
+  const sorted = [...scenarios].sort((a, b) => Number(b.probability || 0) - Number(a.probability || 0));
+  const primary = sorted[0];
+  const rest = sorted.slice(1);
+
+  const pProb = Math.min(100, Math.max(0, Math.round(Number(primary.probability || 0))));
+  const pBias = getBiasType(primary.bias);
+  const tierCls = pProb >= 70
+    ? (pBias === 'bear' ? 'tier-bear' : 'tier-ultra')
+    : pProb >= 55
+      ? (pBias === 'bear' ? 'tier-bear' : 'tier-high')
+      : '';
+  const ringCol = pBias === 'bull' ? '#34D399' : pBias === 'bear' ? '#FB7185' : '#F3BE62';
+  const radius = 34;
+  const circ = +(2 * Math.PI * radius).toFixed(2);
+  const offset = +(circ * (1 - pProb / 100)).toFixed(2);
+
+  const primaryHtml = `
+    <div class="sc-primary-wrap ${tierCls}">
+      <div class="sc-primary-card">
+        <div class="sc-top-bar">
+          <div>
+            <span class="sc-pill ${pBias}">${pProb >= 65 ? L('pillUltra')(pProb) : L('pillMain')(esc(primary.id || 'KB1'), pProb)}</span>
+            <div class="sc-hero-label">${esc(primary.label || '—')}</div>
+          </div>
+          <div class="prob-ring-box">
+            <svg class="prob-ring-svg" viewBox="0 0 82 82" aria-hidden="true">
+              <circle class="prob-ring-bg" cx="41" cy="41" r="${radius}"></circle>
+              <circle class="prob-ring-fg" cx="41" cy="41" r="${radius}" stroke="${ringCol}" stroke-dasharray="${circ}" stroke-dashoffset="${circ}" data-ring-target="${offset}"></circle>
+            </svg>
+            <div class="prob-ring-text">
+              <span class="prob-ring-num" data-count-prob="${pProb}">0%</span>
+              <span class="prob-ring-lbl">${L('probLbl')}</span>
+            </div>
+          </div>
+        </div>
+        <div class="sc-detail-grid">
+          <div class="sc-detail-box">
+            <div class="sc-detail-k">⚡ ${L('triggerLbl')}</div>
+            <div class="sc-detail-v">${esc(primary.trigger || '—')}</div>
+          </div>
+          <div class="sc-detail-box">
+            <div class="sc-detail-k">🎯 ${L('targetLbl')}</div>
+            <div class="sc-detail-v" style="color:${ringCol};font-weight:600">${esc(primary.target || '—')}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  const restHtml = rest.map(s => {
+    const prob = Math.min(100, Math.max(0, Math.round(Number(s.probability || 0))));
+    const bt = getBiasType(s.bias);
+    return `
+      <div class="scenario-card ${bt}">
+        <div>
+          <div class="sc-sec-head">
+            <span class="sc-sec-id">${esc(s.id || '')}</span>
+            <span class="sc-sec-prob ${bt}">${prob}%</span>
+          </div>
+          <div class="sc-sec-title">${esc(s.label || '—')}</div>
+        </div>
+        <div class="sc-sec-line"><strong>Trigger:</strong>${esc(s.trigger || '—')}</div>
+        <div class="sc-sec-line"><strong>Target:</strong>${esc(s.target || '—')}</div>
+        <div class="prob-track"><div class="prob-fill ${bt}" data-pct="${prob}"></div></div>
+      </div>`;
+  }).join('');
 
   return `
-<div class="report-card" style="animation-delay:${idx*0.05}s">
-
-  <div class="card-topbar">
-    <div class="card-meta">
-      <span class="chip chip-vnindex">VNINDEX</span>
-      ${price?`<span class="chip chip-price">${price}</span>`:''}
-      <span class="chip-dt">${r.date_display||''} ${r.time_display||''}</span>
-      ${r.session?`<span class="chip-session">Phiên ${r.session}</span>`:''}
-    </div>
-    <span class="chip-id">${r.id||''}</span>
-  </div>
-
-  <!-- HERO -->
-  <div class="card-hero">
-    <div class="hero-qv">
-      <div class="sec-label">⚡ Quan điểm nhanh</div>
-      <div class="qv-text">${raw?.quick_view||'—'}</div>
-    </div>
-    <div class="hero-score">
-      <div class="score-ring">${buildRing(score)}<div class="score-num">${score}</div></div>
-      <div class="action-label ${getALClass(al)}">${al||'—'}</div>
-      <div class="action-prob">Xác suất: ${sc.action_probability_pct||0}%</div>
-    </div>
-  </div>
-
-  <!-- SCORING với notes -->
-  <div class="scoring-row">
-    <div class="score-col"><div class="sc-label">Kỹ thuật</div>${bar(sc.technical_structure||0,30)}<div class="sc-val">${sc.technical_structure||0}/30</div>${sc.technical_note?`<div class="sc-note">${sc.technical_note}</div>`:''}</div>
-    <div class="score-col"><div class="sc-label">Timing</div>${bar(sc.timing_execution||0,20)}<div class="sc-val">${sc.timing_execution||0}/20</div>${sc.timing_note?`<div class="sc-note">${sc.timing_note}</div>`:''}</div>
-    <div class="score-col"><div class="sc-label">Dòng tiền</div>${bar(sc.liquidity_money_flow||0,20)}<div class="sc-val">${sc.liquidity_money_flow||0}/20</div>${sc.liquidity_note?`<div class="sc-note">${sc.liquidity_note}</div>`:''}</div>
-    <div class="score-col"><div class="sc-label">Sector</div>${bar(sc.sector_rotation_breadth||0,15)}<div class="sc-val">${sc.sector_rotation_breadth||0}/15</div>${sc.sector_note?`<div class="sc-note">${sc.sector_note}</div>`:''}</div>
-    <div class="score-col"><div class="sc-label">Rủi ro</div>${bar(sc.event_policy_risk||0,15)}<div class="sc-val">${sc.event_policy_risk||0}/15</div>${sc.risk_note?`<div class="sc-note">${sc.risk_note}</div>`:''}</div>
-  </div>
-
-  <!-- BỐI CẢNH -->
-  <div class="divider"><span>🇻🇳 Bối cảnh thị trường</span><div class="divider-line"></div></div>
-  <div class="sec"><div class="sec-text">${raw?.market_context||'—'}</div></div>
-
-  <!-- MACRO CATALYSTS -->
-  ${catalysts.length?`
-  <div class="divider"><span>🔑 Vĩ mô & Catalyst</span><div class="divider-line"></div></div>
-  <div class="sec">
-    <div class="catalyst-grid">
-      ${catalysts.map(c=>`
-      <div class="catalyst-item ${c.impact||'neutral'}">
-        ${impactBadge(c.impact)}
-        <div class="catalyst-title">${c.title||''}</div>
-        <div class="catalyst-detail">${c.detail||''}</div>
-      </div>`).join('')}
-    </div>
-  </div>`:''}
-
-  <!-- ĐA KHUNG -->
-  <div class="divider"><span>📊 Phân tích đa khung thời gian</span><div class="divider-line"></div></div>
-  <div class="sec">
-    <div class="tf-grid">
-      <div class="tf-box"><div class="tf-title tf-w1">📅 Weekly (W1)</div><div class="tf-text">${raw?.weekly_analysis||'—'}</div></div>
-      <div class="tf-box"><div class="tf-title tf-d3">📐 3 ngày (3D)</div><div class="tf-text">${raw?.d3_analysis||'—'}</div></div>
-      <div class="tf-box"><div class="tf-title tf-d1">📈 Daily (D1)</div><div class="tf-text">${raw?.daily_analysis||'—'}</div></div>
-      <div class="tf-box"><div class="tf-title tf-m15">⚡ M15</div><div class="tf-text">${raw?.m15_analysis||'—'}</div></div>
-    </div>
-  </div>
-
-  <!-- DÒNG TIỀN -->
-  <div class="divider"><span>💰 Dòng tiền & Thanh khoản</span><div class="divider-line"></div></div>
-  <div class="sec"><div class="sec-text">${raw?.money_flow||'—'}</div></div>
-
-  <!-- SECTOR ROTATION -->
-  ${(sr.leaders||sr.emerging||sr.hot_caution||sr.avoid)?`
-  <div class="divider"><span>🔄 Sector Rotation</span><div class="divider-line"></div></div>
-  <div class="sec">
-    <div class="sector-grid">
-      <div class="sector-box"><div class="sector-title st-lead">🟢 Dẫn dắt</div>${tags(sr.leaders)}</div>
-      <div class="sector-box"><div class="sector-title st-emerge">🔵 Đang hút tiền</div>${tags(sr.emerging)}</div>
-      <div class="sector-box"><div class="sector-title st-hot">🟡 Tăng nóng – cẩn thận</div>${tags(sr.hot_caution)}</div>
-      <div class="sector-box"><div class="sector-title st-avoid">🔴 Nên tránh FOMO</div>${tags(sr.avoid)}</div>
-    </div>
-  </div>`:''}
-
-  <!-- GÓC NHÌN -->
-  <div class="divider"><span>👁 Góc nhìn</span><div class="divider-line"></div></div>
-  <div class="sec">
-    <div class="two-view">
-      <div class="view-box"><div class="vb-title vb-inst">🏦 Quỹ / Tổ chức</div><div class="vb-text">${raw?.institutional_view||'—'}</div></div>
-      <div class="view-box"><div class="vb-title vb-retail">👤 Trader cá nhân</div><div class="vb-text">${raw?.retail_view||'—'}</div></div>
-    </div>
-  </div>
-
-  <!-- SCENARIOS -->
-  ${scenarios.length?`
-  <div class="divider"><span>📋 Ma trận kịch bản</span><div class="divider-line"></div></div>
-  <div class="sec">
-    <div class="scenario-grid">
-      ${scenarios.map(s=>`
-      <div class="scenario-box ${scenarioBiasClass(s.bias)}">
-        <div class="scenario-header">
-          <span class="scenario-id">${s.id||''}</span>
-          <span class="scenario-prob ${scenarioProbClass(s.bias)}">${s.probability||0}%</span>
+    <section class="panel" style="border-color:rgba(243,190,98,0.28)">
+      <div class="panel-body">
+        <div class="panel-title"><span class="panel-title-left">${L('secScenarios')}</span></div>
+        <div class="scenarios-stage">
+          ${primaryHtml}
+          <div class="scenarios-secondary">${restHtml}</div>
         </div>
-        <div class="scenario-label">${s.label||''}</div>
-        <div class="scenario-field"><div class="sf-key">Điều kiện kích hoạt</div><div class="sf-val">${s.trigger||'—'}</div></div>
-        <div class="scenario-field"><div class="sf-key">Mục tiêu / Hệ quả</div><div class="sf-val">${s.target||'—'}</div></div>
-      </div>`).join('')}
-    </div>
-  </div>`:''}
-
-  <!-- CHIẾN LƯỢC 3 CHÂN TRỜI -->
-  ${(horizon.today||horizon.this_week||horizon.medium_term)?`
-  <div class="divider"><span>⏱ Chiến lược theo chân trời</span><div class="divider-line"></div></div>
-  <div class="sec">
-    <div class="horizon-grid">
-      <div class="horizon-box"><div class="hb-title hb-today">📍 Hôm nay</div><div class="hb-text">${horizon.today||'—'}</div></div>
-      <div class="horizon-box"><div class="hb-title hb-week">📆 Trong tuần</div><div class="hb-text">${horizon.this_week||'—'}</div></div>
-      <div class="horizon-box"><div class="hb-title hb-mid">🎯 Trung hạn (Q2)</div><div class="hb-text">${horizon.medium_term||'—'}</div></div>
-    </div>
-  </div>`:''}
-
-  <!-- CHECKLIST -->
-  ${checklist.filter(c=>c).length?`
-  <div class="divider"><span>✅ Checklist hành động nhanh</span><div class="divider-line"></div></div>
-  <div class="sec">
-    <div class="checklist">
-      ${checklist.filter(c=>c).map((c,i)=>`
-      <div class="checklist-item">
-        <div class="cl-num">${i+1}</div>
-        <div class="cl-text">${c}</div>
-      </div>`).join('')}
-    </div>
-  </div>`:''}
-
-  <!-- KẾ HOẠCH HÀNH ĐỘNG -->
-  <div class="divider"><span>🎯 Kế hoạch hành động</span><div class="divider-line"></div></div>
-  <div class="sec">
-    <div class="action-grid">
-      <div class="action-box"><div class="ab-label">🎯 Vị thế mới</div><div class="ab-text">${ap.new_position||'—'}</div></div>
-      <div class="action-box ab-yellow"><div class="ab-label">📦 Đang nắm giữ</div><div class="ab-text">${ap.if_holding||'—'}</div></div>
-      <div class="action-box ab-red"><div class="ab-label">⚠️ Margin</div><div class="ab-text">${ap.if_using_margin||'—'}</div></div>
-      <div class="action-box"><div class="ab-label">✅ Nhóm ngành ưu tiên</div><div class="ab-text">${ap.priority_sectors||'—'}</div></div>
-      <div class="action-box ab-red"><div class="ab-label">🚫 Tránh FOMO</div><div class="ab-text">${ap.avoid_sectors||'—'}</div></div>
-      <div class="action-box ab-purple"><div class="ab-label">⏳ Đang chờ</div><div class="ab-text">${ap.waiting_for||'—'}</div></div>
-      <div class="action-box ab-blue"><div class="ab-label">🔼 Thesis mạnh lên khi</div><div class="ab-text">${ap.bull_confirm||'—'}</div></div>
-      <div class="action-box ab-red"><div class="ab-label">🔽 Thesis vô hiệu khi</div><div class="ab-text">${ap.bull_invalidate||'—'}</div></div>
-    </div>
-  </div>
-
-  <div class="disclaimer">${raw?.disclaimer||''}</div>
-</div>`;
+      </div>
+    </section>`;
 }
 
-function render(){
-  const filtered=getFiltered(),content=document.getElementById('content');
-  if(!filtered.length){content.innerHTML=`<div class="empty-state"><div class="icon">📭</div><h3>Chưa có báo cáo nào</h3><p>Dữ liệu tự động cập nhật lúc 09:15 và 14:45 các ngày giao dịch.</p></div>`;return;}
-  const groups={};
-  filtered.forEach(r=>{const k=r.date_display||'—';if(!groups[k])groups[k]=[];groups[k].push(r);});
-  let html='',idx=0;
-  Object.entries(groups).forEach(([date,reports])=>{
-    html+=`<div class="day-group"><div class="day-header"><span class="day-header-date">📅 ${date}</span><span class="day-header-count">${reports.length} báo cáo</span></div>${reports.map(r=>buildCard(r,idx++)).join('')}</div>`;
+function renderMain() {
+  const container = document.getElementById('mainContent');
+  const r = filteredReports.find(x => x.id === selectedId);
+  if (!r) {
+    container.innerHTML = `<div class="empty"><div style="font-size:32px">📊</div><div>${L('emptyMain')}</div></div>`;
+    return;
+  }
+
+  const raw = getRaw(r);
+  const sc = raw.scoring || {};
+  const ap = raw.action_plan || {};
+  const sr = raw.sector_rotation || {};
+  const hz = raw.horizon || {};
+  const catalysts = Array.isArray(raw.macro_catalysts) ? raw.macro_catalysts : [];
+  const checklist = Array.isArray(raw.checklist) ? raw.checklist.filter(Boolean) : [];
+  const scenarios = Array.isArray(raw.scenarios) ? raw.scenarios : [];
+
+  const score = getScore(r);
+  const al = getAL(r);
+  const sCol = scoreColor(score);
+  const sRadius = 44;
+  const sCirc = +(2 * Math.PI * sRadius).toFixed(2);
+  const sOffset = +(sCirc * (1 - Math.min(100, Math.max(0, score)) / 100)).toFixed(2);
+
+  // Quick Switcher: latest morning (before 13:00) vs latest afternoon (13:00+)
+  const latestAft = allReports.find(x => parseInt((x.time_display || '15').split(':')[0], 10) >= 13);
+  const latestMorn = allReports.find(x => parseInt((x.time_display || '11').split(':')[0], 10) < 13);
+
+  const pillars = [
+    { name: L('pTech'), val: Number(sc.technical_structure || 0), max: 30, note: sc.technical_note },
+    { name: L('pTime'), val: Number(sc.timing_execution || 0), max: 20, note: sc.timing_note },
+    { name: L('pFlow'), val: Number(sc.liquidity_money_flow || 0), max: 20, note: sc.liquidity_note },
+    { name: L('pSec'), val: Number(sc.sector_rotation_breadth || 0), max: 15, note: sc.sector_note },
+    { name: L('pRisk'), val: Number(sc.event_policy_risk || 0), max: 15, note: sc.risk_note }
+  ];
+
+  const reportChecks = checklistState[r.id] || {};
+  const tagsHtml = (arr) => (Array.isArray(arr) && arr.length ? arr : ['—']).map(t => `<span class="sector-tag">${esc(t)}</span>`).join('');
+  const impBadge = (imp) => {
+    if (imp === 'positive') return `<span class="badge al-buy">${L('impPos')}</span>`;
+    if (imp === 'negative') return `<span class="badge al-avoid">${L('impNeg')}</span>`;
+    return `<span class="badge al-hold">${L('impNeu')}</span>`;
+  };
+
+  container.innerHTML = `
+    <!-- Quick Session Switcher -->
+    <div class="quick-bar">
+      <div class="quick-pills">
+        ${latestAft ? `<button type="button" class="qa-btn ${r.id === latestAft.id ? 'active' : ''}" data-quick="${esc(latestAft.id)}">${L('latestAfternoon')} <span class="mono" style="color:var(--kz-gold)">${esc(latestAft.date_display)} · ${esc(fmtPrice(latestAft.price_current))}</span></button>` : ''}
+        ${latestMorn ? `<button type="button" class="qa-btn ${r.id === latestMorn.id ? 'active' : ''}" data-quick="${esc(latestMorn.id)}">${L('latestMorning')} <span class="mono" style="color:var(--kz-cyan)">${esc(latestMorn.date_display)} · ${esc(fmtPrice(latestMorn.price_current))}</span></button>` : ''}
+      </div>
+      <div class="session-meta-pill">${esc(r.date_display || '')} · ${esc(r.time_display || '')} UTC+7</div>
+    </div>
+
+    <!-- HERO EXECUTIVE STAGE -->
+    <section class="hero">
+      <canvas id="kzHeroCanvas" aria-hidden="true"></canvas>
+      <div class="hero-inner">
+        <div>
+          <div class="hero-top-line">
+            <div class="hero-title">VNINDEX</div>
+            <div class="hero-price-inline" id="heroPriceNum" data-price="${Number(r.price_current || 0)}">${esc(fmtPrice(r.price_current))}</div>
+            ${al ? `<span class="badge ${getALClass(al)}" style="font-size:11.5px;padding:4px 11px">${esc(al)}</span>` : ''}
+            ${r.session ? `<span class="badge al-hold">${L('sessionLbl')(esc(r.session))}</span>` : ''}
+          </div>
+          <div class="hero-meta">
+            <span>📅 ${esc(r.date_display || '—')}</span>
+            <span>🕐 ${esc(r.time_display || '—')} UTC+7</span>
+            <span>🏷 ${esc(r.id || '')}</span>
+          </div>
+          <div class="hero-qv">${esc(raw.quick_view || '—')}</div>
+          <div class="hero-actions">
+            <button type="button" class="kz-btn primary" id="copyBriefBtn">${L('copyBrief')}</button>
+            <a href="https://aurora.kenvinzone.com/" target="_blank" rel="noopener noreferrer" class="kz-btn gold">${L('auroraCta')}</a>
+          </div>
+        </div>
+
+        <div class="hero-score-card">
+          <div class="score-ring-wrap">
+            <svg class="score-ring-svg" viewBox="0 0 106 106" aria-hidden="true">
+              <circle class="score-ring-bg" cx="53" cy="53" r="${sRadius}"></circle>
+              <circle class="score-ring-fg" cx="53" cy="53" r="${sRadius}" stroke="${sCol}" stroke-dasharray="${sCirc}" stroke-dashoffset="${sCirc}" data-ring-target="${sOffset}"></circle>
+            </svg>
+            <div class="score-ring-center">
+              <span class="score-ring-num" style="color:${sCol}" data-count-score="${score}">0</span>
+              <span class="score-ring-max">/ 100</span>
+            </div>
+          </div>
+          <div class="mono" style="font-size:11px;color:var(--kz-text-soft)">${L('actionProb')(sc.action_probability_pct || 0)}</div>
+          ${buildScoreSparkline()}
+        </div>
+      </div>
+    </section>
+
+    <!-- 5-PILLAR SCORING -->
+    <section class="panel">
+      <div class="panel-body">
+        <div class="panel-title"><span class="panel-title-left">${L('secPillars')}</span></div>
+        <div class="pillars-grid">
+          ${pillars.map(p => {
+            const pct = Math.min(100, Math.round((p.val / p.max) * 100));
+            const col = pct >= 68 ? 'var(--kz-green)' : pct >= 48 ? 'var(--kz-gold)' : 'var(--kz-rose)';
+            return `
+              <div class="pillar-card">
+                <div class="pillar-head">
+                  <span class="pillar-name">${esc(p.name)}</span>
+                  <span class="pillar-val" style="color:${col}">${p.val}/${p.max}</span>
+                </div>
+                <div class="pillar-track"><div class="pillar-fill" data-pct="${pct}" style="background:${col}"></div></div>
+                ${p.note ? `<div class="pillar-note">${esc(p.note)}</div>` : ''}
+              </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- FLAGSHIP SCENARIOS STAGE -->
+    ${buildScenariosStage(scenarios)}
+
+    <!-- TACTICAL ACTION PLAN -->
+    <section class="panel">
+      <div class="panel-body">
+        <div class="panel-title"><span class="panel-title-left">${L('secAction')}</span></div>
+        <div class="action-grid">
+          <div class="action-box"><div class="ab-label">${L('apNew')}</div><div class="ab-text">${esc(ap.new_position || '—')}</div></div>
+          <div class="action-box gold"><div class="ab-label">${L('apHold')}</div><div class="ab-text">${esc(ap.if_holding || '—')}</div></div>
+          <div class="action-box rose"><div class="ab-label">${L('apMargin')}</div><div class="ab-text">${esc(ap.if_using_margin || '—')}</div></div>
+          <div class="action-box"><div class="ab-label">${L('apPri')}</div><div class="ab-text">${esc(ap.priority_sectors || '—')}</div></div>
+          <div class="action-box rose"><div class="ab-label">${L('apAvoid')}</div><div class="ab-text">${esc(ap.avoid_sectors || '—')}</div></div>
+          <div class="action-box purple"><div class="ab-label">${L('apWait')}</div><div class="ab-text">${esc(ap.waiting_for || '—')}</div></div>
+          <div class="action-box cyan"><div class="ab-label">${L('apBull')}</div><div class="ab-text">${esc(ap.bull_confirm || '—')}</div></div>
+          <div class="action-box rose"><div class="ab-label">${L('apBear')}</div><div class="ab-text">${esc(ap.bull_invalidate || '—')}</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE CHECKLIST -->
+    ${checklist.length ? `
+    <section class="panel">
+      <div class="panel-body">
+        <div class="panel-title"><span class="panel-title-left">${L('secChecklist')}</span></div>
+        <div class="checklist">
+          ${checklist.map((item, i) => `
+            <div class="check-item ${reportChecks[i] ? 'checked' : ''}" data-rid="${esc(r.id)}" data-idx="${i}">
+              <div class="check-box">✓</div>
+              <div class="check-text">${esc(item)}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </section>` : ''}
+
+    <!-- MULTI-TIMEFRAME ANALYSIS -->
+    <section class="panel">
+      <div class="panel-body">
+        <div class="panel-title"><span class="panel-title-left">${L('secMtf')}</span></div>
+        <div class="tf-grid">
+          <div class="tf-card w1"><div class="tf-head" style="color:var(--kz-purple)">${L('tfW1')}</div><div class="tf-body">${esc(raw.weekly_analysis || '—')}</div></div>
+          <div class="tf-card d3"><div class="tf-head" style="color:var(--kz-blue)">${L('tfD3')}</div><div class="tf-body">${esc(raw.d3_analysis || '—')}</div></div>
+          <div class="tf-card d1"><div class="tf-head" style="color:var(--kz-green)">${L('tfD1')}</div><div class="tf-body">${esc(raw.daily_analysis || '—')}</div></div>
+          <div class="tf-card m15"><div class="tf-head" style="color:var(--kz-gold)">${L('tfM15')}</div><div class="tf-body">${esc(raw.m15_analysis || '—')}</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARKET CONTEXT & MACRO CATALYSTS -->
+    <section class="panel">
+      <div class="panel-body">
+        <div class="panel-title"><span class="panel-title-left">${L('secContext')}</span></div>
+        <div class="info-text" style="margin-bottom:${catalysts.length ? '16px' : '0'}">${esc(raw.market_context || '—')}</div>
+        ${catalysts.length ? `
+          <div class="catalyst-grid">
+            ${catalysts.map(c => `
+              <div class="catalyst-card ${esc(c.impact || 'neutral')}">
+                ${impBadge(c.impact)}
+                <div class="cat-title">${esc(c.title || '')}</div>
+                <div class="cat-detail">${esc(c.detail || '')}</div>
+              </div>`).join('')}
+          </div>` : ''}
+      </div>
+    </section>
+
+    <!-- MONEY FLOW & SECTOR ROTATION -->
+    <section class="panel">
+      <div class="panel-body">
+        <div class="panel-title"><span class="panel-title-left">${L('secFlow')}</span></div>
+        <div class="info-text" style="margin-bottom:16px">${esc(raw.money_flow || '—')}</div>
+        ${(sr.leaders || sr.emerging || sr.hot_caution || sr.avoid) ? `
+          <div class="sector-grid">
+            <div class="sector-box"><div class="sector-title" style="color:var(--kz-green)">${L('srLead')}</div>${tagsHtml(sr.leaders)}</div>
+            <div class="sector-box"><div class="sector-title" style="color:var(--kz-cyan)">${L('srEmerge')}</div>${tagsHtml(sr.emerging)}</div>
+            <div class="sector-box"><div class="sector-title" style="color:var(--kz-gold)">${L('srHot')}</div>${tagsHtml(sr.hot_caution)}</div>
+            <div class="sector-box"><div class="sector-title" style="color:var(--kz-rose)">${L('srAvoid')}</div>${tagsHtml(sr.avoid)}</div>
+          </div>` : ''}
+      </div>
+    </section>
+
+    <!-- INSTITUTIONAL VS RETAIL + 3 HORIZONS -->
+    <section class="panel">
+      <div class="panel-body">
+        <div class="panel-title"><span class="panel-title-left">${L('secViews')}</span></div>
+        <div class="dual-grid" style="margin-bottom:18px">
+          <div class="info-box"><div class="info-title" style="color:var(--kz-green)">${L('vInst')}</div><div class="info-text">${esc(raw.institutional_view || '—')}</div></div>
+          <div class="info-box"><div class="info-title" style="color:var(--kz-blue)">${L('vRetail')}</div><div class="info-text">${esc(raw.retail_view || '—')}</div></div>
+        </div>
+        ${(hz.today || hz.this_week || hz.medium_term) ? `
+          <div class="panel-title"><span class="panel-title-left">${L('secHorizon')}</span></div>
+          <div class="horizon-grid">
+            <div class="info-box"><div class="info-title" style="color:var(--kz-gold)">${L('hToday')}</div><div class="info-text">${esc(hz.today || '—')}</div></div>
+            <div class="info-box"><div class="info-title" style="color:var(--kz-green)">${L('hWeek')}</div><div class="info-text">${esc(hz.this_week || '—')}</div></div>
+            <div class="info-box"><div class="info-title" style="color:var(--kz-cyan)">${L('hMid')}</div><div class="info-text">${esc(hz.medium_term || '—')}</div></div>
+          </div>` : ''}
+      </div>
+    </section>
+
+    <!-- KENVINZONE ECOSYSTEM CROSS-LINK -->
+    <section class="eco-banner">
+      <div>
+        <div class="mono" style="font-size:11px;color:var(--kz-cyan);font-weight:700;letter-spacing:.08em">${L('ecoSub')}</div>
+        <div style="font-size:15px;font-weight:800;margin-top:3px">${L('ecoTitle')}</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="https://gold-nasdaq.kenvinzone.com/" target="_blank" rel="noopener noreferrer" class="kz-btn primary">${L('ecoBtn1')}</a>
+        <a href="https://bias.kenvinzone.com/" target="_blank" rel="noopener noreferrer" class="kz-btn gold">${L('ecoBtn2')}</a>
+      </div>
+    </section>
+
+    ${raw.disclaimer ? `<div class="disclaimer">${esc(raw.disclaimer)}</div>` : ''}
+  `;
+
+  // Quick switcher handlers
+  container.querySelectorAll('[data-quick]').forEach(btn => {
+    btn.onclick = () => { selectedId = btn.dataset.quick; renderList(); renderMain(); };
   });
-  content.innerHTML=html;
+
+  // Start Hero Canvas
+  startHeroCanvas();
+
+  // GSAP Entrance + Price & Score Roll-Up
+  if (!prefersReduced && typeof window.gsap !== 'undefined') {
+    window.gsap.fromTo(
+      container.querySelectorAll('.hero, .panel'),
+      { y: 14, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.42, stagger: 0.04, ease: 'power2.out', clearProps: 'transform,opacity' }
+    );
+    const priceEl = document.getElementById('heroPriceNum');
+    const pNum = Number(priceEl?.dataset.price || 0);
+    if (priceEl && pNum > 0) {
+      const obj = { v: pNum * 0.992 };
+      window.gsap.to(obj, { v: pNum, duration: 0.65, ease: 'power3.out', onUpdate: () => { priceEl.textContent = fmtPrice(obj.v); } });
+    }
+  }
+
+  // Animate Rings + Bars + Count-Ups
+  setTimeout(() => {
+    container.querySelectorAll('[data-pct]').forEach(el => { el.style.width = el.dataset.pct + '%'; });
+    container.querySelectorAll('[data-ring-target]').forEach(el => { el.style.strokeDashoffset = el.dataset.ringTarget; });
+    container.querySelectorAll('[data-count-score]').forEach(el => {
+      const t = Number(el.dataset.countScore || 0);
+      if (!prefersReduced && typeof window.gsap !== 'undefined') {
+        const o = { v: 0 };
+        window.gsap.to(o, { v: t, duration: 0.85, ease: 'power3.out', onUpdate: () => { el.textContent = Math.round(o.v); } });
+      } else { el.textContent = t; }
+    });
+    container.querySelectorAll('[data-count-prob]').forEach(el => {
+      const t = Number(el.dataset.countProb || 0);
+      if (!prefersReduced && typeof window.gsap !== 'undefined') {
+        const o = { v: 0 };
+        window.gsap.to(o, { v: t, duration: 0.9, ease: 'power3.out', onUpdate: () => { el.textContent = Math.round(o.v) + '%'; } });
+      } else { el.textContent = t + '%'; }
+    });
+  }, 70);
+
+  // Copy Quick Brief button
+  const copyBtn = document.getElementById('copyBriefBtn');
+  if (copyBtn) {
+    const topSc = [...scenarios].sort((a,b) => Number(b.probability||0) - Number(a.probability||0))[0];
+    const brief = `🇻🇳 VNINDEX ${fmtPrice(r.price_current)} (${r.date_display} ${r.time_display})\n• Score: ${score}/100 | Action: ${al} (${sc.action_probability_pct||0}%)\n• Quan điểm: ${raw.quick_view || ''}${topSc ? `\n• Kịch bản chính (${topSc.probability}%): ${topSc.label} → ${topSc.target}` : ''}\n🔗 https://vnindex.kenvinzone.com/`;
+    copyBtn.onclick = (e) => {
+      navigator.clipboard?.writeText(brief).catch(() => {});
+      showToast(L('copiedBrief'));
+      spawnSparkles(e.clientX, e.clientY);
+    };
+  }
+
+  // Interactive Checklist persistence
+  container.querySelectorAll('.check-item').forEach(el => {
+    el.onclick = (e) => {
+      const { rid, idx } = el.dataset;
+      el.classList.toggle('checked');
+      (checklistState[rid] ||= {})[idx] = el.classList.contains('checked');
+      try { localStorage.setItem(CHECKLIST_KEY, JSON.stringify(checklistState)); } catch {}
+      if (el.classList.contains('checked')) spawnSparkles(e.clientX, e.clientY);
+    };
+  });
 }
 
-loadData();
-setInterval(loadData,5*60*1000);
+// ============================================================
+// UI CONTROLS, SHEET, TOAST & SHORTCUTS
+// ============================================================
+function openSheet() { document.getElementById('sheetBackdrop').classList.add('open'); document.getElementById('bottomSheet').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeSheet() { document.getElementById('sheetBackdrop').classList.remove('open'); document.getElementById('bottomSheet').classList.remove('open'); document.body.style.overflow = ''; }
+function showToast(msg) {
+  const wrap = document.getElementById('toastWrap');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  el.onclick = () => el.remove();
+  wrap.appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+document.getElementById('fabBtn').addEventListener('click', openSheet);
+document.getElementById('sheetClose').addEventListener('click', closeSheet);
+document.getElementById('sheetBackdrop').addEventListener('click', closeSheet);
+
+const advToggle = document.getElementById('advFilterToggle');
+const advBox = document.getElementById('advFiltersBox');
+advToggle.addEventListener('click', () => {
+  const isCol = advBox.classList.toggle('collapsed');
+  advToggle.classList.toggle('open', !isCol);
+  advToggle.textContent = isCol ? L('moreFilters') : L('lessFilters');
+});
+
+document.querySelectorAll('#timeChips .chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    filters.time = btn.dataset.time;
+    document.querySelectorAll('#timeChips .chip').forEach(c => c.classList.toggle('active', c === btn));
+    applyFiltersAndRender();
+  });
+});
+document.getElementById('monthSelect').addEventListener('change', (e) => { filters.month = e.target.value; applyFiltersAndRender(); });
+document.getElementById('actionSelect').addEventListener('change', (e) => { filters.action = e.target.value; applyFiltersAndRender(); });
+
+let searchTimer;
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => { filters.search = e.target.value.trim(); applyFiltersAndRender(); }, 180);
+});
+
+document.getElementById('refreshBtn').addEventListener('click', async () => {
+  const b = document.getElementById('refreshBtn');
+  b.classList.add('spinning');
+  await loadData(true);
+  setTimeout(() => b.classList.remove('spinning'), 500);
+});
+document.getElementById('langToggle').addEventListener('click', () => setLang(currentLang === 'en' ? 'vi' : 'en'));
+
+document.addEventListener('keydown', (e) => {
+  if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  const idx = filteredReports.findIndex(r => r.id === selectedId);
+  if (e.key === 'j' && idx < filteredReports.length - 1) { selectedId = filteredReports[idx + 1].id; renderList(); renderMain(); }
+  else if (e.key === 'k' && idx > 0) { selectedId = filteredReports[idx - 1].id; renderList(); renderMain(); }
+  else if (e.key === '/') { e.preventDefault(); document.getElementById('searchInput')?.focus(); }
+  else if (e.key === 'Escape') closeSheet();
+});
+
+applyStaticLang();
+loadData(false);
+setInterval(() => loadData(false), 5 * 60 * 1000);
 </script>
 </body>
 </html>
